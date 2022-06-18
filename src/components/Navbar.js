@@ -11,10 +11,7 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
-  Typography,
   Button,
-  Icon,
-  SvgIcon,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -41,7 +38,10 @@ export default function Navbar(props) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemButton
+              href={`/${item.toLowerCase()}`}
+              sx={{ textAlign: "center" }}
+            >
               <ListItemText primary={item} />
             </ListItemButton>
           </ListItem>
