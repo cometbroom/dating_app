@@ -1,12 +1,6 @@
 .container {
 }
 
-.container :nth-of-type(2n) {
-}
-
-.container :nth-of-type(2n-1) {
-}
-
 .card {
 	margin: 10px 0px;
 	display: flex;
