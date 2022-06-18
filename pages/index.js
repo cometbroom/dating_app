@@ -1,45 +1,15 @@
-import { createTheme, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import LandingContent from "../src/components/LandingContent";
 import Layout from "../src/components/layout";
 import Navbar from "../src/components/Navbar";
+import configurateTheme from "../src/tools/ThemeConfig";
 
-const theme = createTheme({
-  palette: {
-    type: "dark",
-    mode: "dark",
-    primary: {
-      main: "#27efff",
-    },
-    secondary: {
-      main: "#fff1c7",
-    },
-  },
-  typography: {
-    fontFamily: 'Love Ya Like A Sister, Comfortaa, cursive, "Roboto"',
-    fontSize: 18,
-    fontWeightLight: 300,
-    htmlFontSize: 16,
-  },
-  overrides: {
-    MuiButton: {
-      root: {
-        background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-        border: 0,
-        borderRadius: 3,
-        boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-        color: "white",
-        height: 48,
-        padding: "0 30px",
-      },
-    },
-  },
-});
 
 export default function Home() {
   return (
-    <ThemeProvider theme={theme}>
-      <Layout>
-        <Navbar></Navbar>
-      </Layout>
-    </ThemeProvider>
+    <>
+      <Navbar></Navbar>
+      <LandingContent></LandingContent>
+    </>
   );
 }

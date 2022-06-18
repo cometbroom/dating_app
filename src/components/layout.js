@@ -1,8 +1,7 @@
-import { ThemeProvider } from "@mui/material";
+import { Container, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/system";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
-
 
 export default function Layout({ children }) {
   return (
@@ -15,7 +14,7 @@ export default function Layout({ children }) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/submarine.svg" />
       </Head>
-      {children}
+      <Container>{children}</Container>
     </>
   );
 }
