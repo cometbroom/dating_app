@@ -1,10 +1,10 @@
-import { NextSeo } from "next-seo";
 import Layout from "../src/components/layout";
-import styles from "../styles/Home.module.css";
+import Navbar from "../src/components/Navbar";
 
 export default function Home() {
   return (
     <Layout>
+      <Navbar></Navbar>
       <h1>Hi</h1>
     </Layout>
   );
