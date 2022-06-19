@@ -19,9 +19,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 const drawerWidth = 240;
 const LIST_ITEMS = [
-  { title: "SONAR", icon: <RadarIcon /> },
-  { title: "Chat", icon: <AssistantOutlinedIcon /> },
-  { title: "Settings", icon: <SettingsIcon /> },
+  { title: "SONAR", icon: <RadarIcon />, link: "/application/" },
+  { title: "Chat", icon: <AssistantOutlinedIcon />, link: "application/chats" },
+  { title: "Settings", icon: <SettingsIcon />, link: "application/settings" },
 ];
 
 export default function ApplicationLayout(props) {
@@ -63,7 +63,7 @@ export default function ApplicationLayout(props) {
         <List>
           {LIST_ITEMS.map((item, index) => (
             <ListItem key={index} disablePadding>
-              <ListItemButton>
+              <ListItemButton href={item.link}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItemButton>
