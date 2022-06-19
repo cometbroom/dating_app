@@ -1,4 +1,4 @@
-import ApplicationLayout from "../../src/components/ApplicationLayout";
+import ApplicationLayout from "../../src/Layouts/ApplicationLayout";
 import MatchCard from "../../src/components/MatchCard";
 import useFetch from "../../src/hooks/useFetch";
 import ErrorProvider from "../../src/tools/ErrorProvider";

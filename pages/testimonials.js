@@ -1,7 +1,7 @@
 import TestimonialView from "../src/views/TestimonialView";
-import Navbar from "../src/components/Navbar";
 import ErrorProvider from "../src/tools/ErrorProvider";
 import useFetch from "../src/hooks/useFetch";
+import LandingLayout from "../src/Layouts/LandingLayout";
 
 export default function Testimonials() {
   const [data, loading, error] = useFetch(
@@ -10,10 +10,11 @@ export default function Testimonials() {
 
   return (
     <>
-      <Navbar></Navbar>
-      <ErrorProvider loading={loading} error={error}>
-        {data && <TestimonialView users={data.results} />}
-      </ErrorProvider>
+      <LandingLayout>
+        <ErrorProvider loading={loading} error={error}>
+          {data && <TestimonialView users={data.results} />}
+        </ErrorProvider>
+      </LandingLayout>
     </>
   );
 }

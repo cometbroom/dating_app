@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { DefaultSeo } from "next-seo";
 import seoConfig from "../seo.config";
-import Layout from "../src/components/layout";
+import Layout from "../src/Layouts/layout";
 import configurateTheme from "../src/tools/ThemeConfig";
 import "../styles/globals.css";
 
