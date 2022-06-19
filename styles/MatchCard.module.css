@@ -1,0 +1,21 @@
+
+.card {
+	display: flex;
+	flex-direction: column;
+}
+
+.cardAction {
+	flex:1;
+}
+
+.cardMedia {
+	object-fit: cover !important;
+}
+
+.cardContent {
+	flex:1;
+}
+
+.slider {
+	flex:1;
+}

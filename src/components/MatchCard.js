@@ -7,9 +7,10 @@ import {
   Slider,
   Typography,
 } from "@mui/material";
+import styles from "../../styles/MatchCard.module.css";
 
 const LOREM =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac ultrices lorem. Cras dictum, nunc sit amet blandit dignissim, enim velit sagittis eros, ut lobortis est purus eget nibh. Ut eu congue libero, at porta felis. Nulla quis est nec mauris pharetra ultrices. Pellentesque sit amet posuere odio, at tempus urna. Sed at nisl hendrerit, pellentesque dolor sed, vestibulum ante. Sed sollicitudin condimentum libero.";
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac ultrices lorem. Cras dictum, nunc sit amet blandit dignissim, enim velit sagittis eros, ut lobortis est purus eget nibh. Ut eu congue libero, at porta felis. ";
 
 function valueText(value) {
   return `${value} out of 10`;
@@ -18,15 +19,20 @@ function valueText(value) {
 export default function MatchCard({ img, title, bio }) {
   return (
     <>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardActionArea>
+      <Card
+        sx={{
+          m: "auto",
+        }}
+        className={styles.card}
+      >
+        <CardActionArea className={styles.cardAction}>
           <CardMedia
             component="img"
-            height="140"
             image={img}
             alt={`An image of ${title}`}
+            className={styles.cardMedia}
           />
-          <CardContent>
+          <CardContent className={styles.cardContent}>
             <Typography gutterBottom variant="h5" component="div">
               {title}
             </Typography>
@@ -44,6 +50,7 @@ export default function MatchCard({ img, title, bio }) {
             max={10}
             valueLabelDisplay="auto"
             getAriaValueText={valueText}
+            classes={styles.slider}
           />
         </CardActions>
       </Card>{" "}
