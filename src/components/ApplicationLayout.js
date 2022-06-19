@@ -75,7 +75,7 @@ export default function ApplicationLayout(props) {
         component="main"
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
       >
-        <Toolbar />
+        <Toolbar sx={{ bgColor: "red", p: 0 }} />
         {props.children}
       </Box>
     </Box>
