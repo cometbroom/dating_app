@@ -49,13 +49,13 @@ export default function DirectionNav({ direction }) {
         whileHover={{
           width: "100%",
           filter: "brightness(1.5)",
-          transition: { duration: 0.5 },
+          transition: { duration: 0.3 },
         }}
         whileTap={{
           boxShadow: "7px 6px 28px 1px rgba(0, 0, 0, 0.24)",
           filter: "brightness(1)",
           borderWidth: "10px",
-          transition: { duration: 0.3 },
+          transition: { duration: 0.2 },
         }}
         {...Vars}
       >
