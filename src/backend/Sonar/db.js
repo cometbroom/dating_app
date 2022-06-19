@@ -1,6 +1,6 @@
 import { writeFileSync, readFileSync } from "fs";
 
-const USERSPATH = new URL("./users.json", import.meta.url);
+const USERSPATH = new URL("./profiles.json", import.meta.url);
 
 function writeList(list) {
   const jsonString = JSON.stringify(list, null, 2);

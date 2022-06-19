@@ -39,7 +39,9 @@ export default function LandingContent() {
           item
           xs={12}
         >
-          <Button variant="contained">Get Started</Button>
+          <Button variant="contained" href="/application/">
+            Get Started
+          </Button>
         </Grid>
       </Grid>
     </>
