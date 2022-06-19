@@ -12,3 +12,5 @@ export const COLORS = {
   warningLight: "#ffb74d",
   warningDark: "#f57c00",
 };
+
+export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

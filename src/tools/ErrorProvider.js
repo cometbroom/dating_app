@@ -1,5 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
+import { GET_ERROR_PATH } from "./constants";
 
 export default function ErrorProvider(props) {
   const router = useRouter();
@@ -10,7 +11,7 @@ export default function ErrorProvider(props) {
 
   return (
     <>
-      {props.error && navigate(`/error/${props.error}`)}
+      {props.error && navigate(GET_ERROR_PATH(props.error))}
       {props.loading ? <CircularProgress /> : props.children}
     </>
   );
