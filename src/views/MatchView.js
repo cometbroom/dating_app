@@ -62,7 +62,7 @@ export default function MatchView() {
   return (
     <Grid
       container
-      sx={{ alignItems: "center", height: "100vh", p: 3, overflow: "hidden" }}
+      sx={{ alignItems: "center", height: "100vh", p: 3, overflowX: "hidden" }}
     >
       {matches && (
         <Grid item md={3}>

@@ -9,9 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../../styles/MatchCard.module.css";
-import { GET_ERROR_PATH } from "../tools/constants";
 
 const LOREM =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac ultrices lorem. Cras dictum, nunc sit amet blandit dignissim, enim velit sagittis eros, ut lobortis est purus eget nibh. Ut eu congue libero, at porta felis. ";
@@ -20,12 +19,32 @@ function valueText(value) {
   return `${value} out of 10`;
 }
 
-export default function MatchCard({ sx, img, title, bio }) {
-  const [interest, setInterest] = useState(0);
+export default function MatchCard({
+  sx,
+  img,
+  title,
+  bio,
+  dataInterest,
+  sendInterest,
+}) {
+  const [interest, setInterest] = useState(dataInterest);
+  const interestRef = useRef(interest);
 
   function sliderChanged(e, value) {
     setInterest(value);
   }
+
+  //Effect to keep my ref updated so I can send it without closure to cleanup
+  useEffect(() => {
+    interestRef.current = interest;
+  }, [interest]);
+
+  useEffect(() => {
+    return function () {
+      //Send interest to server.
+      sendInterest(interestRef.current);
+    };
+  }, []);
 
   return (
     <>
@@ -69,7 +88,7 @@ export default function MatchCard({ sx, img, title, bio }) {
             <Typography>Interest:</Typography>
             <Slider
               aria-label="Interest Slider"
-              defaultValue={0}
+              defaultValue={dataInterest}
               step={1}
               min={0}
               max={10}
