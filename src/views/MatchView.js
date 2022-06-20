@@ -20,7 +20,7 @@ export default function MatchView() {
 
   function directionalNav(direction) {
     return async () => {
-      if ((context = 0 && direction === "left")) return;
+      if (context === 0 && direction === "left") return;
       const skipDir = direction === "left" ? -1 : 1;
       setContext(context + skipDir);
     };
