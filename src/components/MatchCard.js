@@ -77,7 +77,6 @@ export default function MatchCard({ sx, img, title, bio }) {
               valueLabelDisplay="auto"
               getAriaValueText={valueText}
               onChange={sliderChanged}
-              classes={styles.slider}
             />
           </Toolbar>
         </CardActions>

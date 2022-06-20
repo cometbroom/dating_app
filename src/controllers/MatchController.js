@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import MatchCard from "../components/MatchCard";
 import { PaginationContext } from "../contexts/PaginationContext";
 import useFetch from "../hooks/useFetch";

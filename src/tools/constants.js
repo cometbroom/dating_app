@@ -13,4 +13,8 @@ export const COLORS = {
   warningDark: "#f57c00",
 };
 
+export const ANIMATIONS = {
+  swipeDuration: 0.5,
+};
+
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;
