@@ -1,4 +1,24 @@
-import DB from "./db.js";
+const matchesAggregation = (interests) => [
+  {
+    $set: {
+      matchedCount: {
+        $size: {
+          $setIntersection: ["$interests", interests],
+        },
+      },
+    },
+  },
+  {
+    $sort: {
+      matchedCount: -1,
+    },
+  },
+  {
+    $project: {
+      _id: "$_id",
+    },
+  },
+];
 
 function match(interests, amountOfResults = 20) {
   const users = DB.readList();
@@ -22,7 +42,19 @@ function affinityCounter(array1, array2) {
   return affinity;
 }
 
+async function matches(client, interests) {
+  try {
+    const coll = client.db("Submarine").collection("users");
+    const foundDocs = await coll
+      .aggregate(matchesAggregation(interests))
+      .toArray();
+    return foundDocs;
+  } catch (error) {
+    throw error;
+  }
+}
+
 const SONAR = {
-  match,
+  matches,
 };
 export default SONAR;

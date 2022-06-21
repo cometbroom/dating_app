@@ -20,18 +20,25 @@ export default async function handler(req, res) {
           .status(405)
           .send({ message: `Could not handle request: ${isNotValid}` });
       const collInts = CLIENT_DB.db("Submarine").collection("interests");
+      //Upper case insensitivity
       const interests = req.body.interests.map((x) => x.toUpperCase());
+
+      //find interest id's by name
       const foundDocs = await collInts
         .find({ interest: { $in: interests } })
         .map((m) => m._id)
         .toArray();
-      const matches = await SONAR
+
+      //Find matches accourding to interest
+      const matches = await SONAR.matches(CLIENT_DB, foundDocs);
+
+      //Insert user with interests and matches
       const ack = await CLIENT_DB.db("Submarine")
         .collection("users")
         .insertOne({
           name: req.body.name,
           interests: foundDocs,
-          matches: [],
+          matches: matches,
           profileImg: req.body.img,
           index: 0,
         });
