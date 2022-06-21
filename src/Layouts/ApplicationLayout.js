@@ -172,7 +172,7 @@ export default function ApplicationLayout(props) {
       <Box
         component={motion.div}
         sx={{
-          bgcolor: "background.default",
+          bgColor: "background.default",
           p: 3,
           height: "100%",
         }}
