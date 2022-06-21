@@ -1,10 +1,10 @@
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import { useContext } from "react";
 import DirectionNav from "../components/DirectionNav";
 import { motion, useAnimation } from "framer-motion";
 import MatchController from "../controllers/MatchController";
 import { PaginationContext } from "../contexts/PaginationContext";
 import { ANIMATIONS } from "../tools/constants";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 const LEFT_HIDDEN = "-200%";
 const RIGHT_HIDDEN = "200%";
@@ -39,7 +39,19 @@ export default function MatchView() {
 
   //await controls.start({ left: "-200%", transition: { duration: 1 } });
 
+  const reduceDbIndex = async function () {
+    try {
+      await fetch("api/profiles/0", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
+  };
+
   function directionalNav(direction) {
+    console.log(context);
     return async () => {
       switch (direction) {
         case "left":
@@ -47,6 +59,7 @@ export default function MatchView() {
           await controls.start("hiddenR");
           controls.set("hiddenL");
           setContext(context - 1);
+          await reduceDbIndex();
           controls.start("visible");
           break;
         case "right":
@@ -62,7 +75,12 @@ export default function MatchView() {
   return (
     <Grid
       container
-      sx={{ alignItems: "center", height: "100vh", p: 3, overflowX: "hidden" }}
+      sx={{
+        alignItems: "center",
+        height: "100vh",
+        p: 3,
+        overflowX: "hidden",
+      }}
     >
       {matches && (
         <Grid item md={3}>

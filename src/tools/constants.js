@@ -17,4 +17,6 @@ export const ANIMATIONS = {
   swipeDuration: 0.5,
 };
 
+export const LOGGED_IN_USER = "62b17e42e8d61e12618a5626";
+
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;
