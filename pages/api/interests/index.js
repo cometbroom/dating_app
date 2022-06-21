@@ -1,38 +1,36 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { INTERESTS } from "../../../src/backend/Sonar/interests";
 import "dotenv/config";
-import { CLIENT_DB } from "../../../db/mdb";
-import { ObjectId } from "mongodb";
+import nextConnect from "next-connect";
+import middleware from "../../../middleware/database";
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      await CLIENT_DB.connect();
-      const isNotValid = validateBody(req.body);
-      if (isNotValid)
-        return res
-          .status(405)
-          .send({ message: `Could not handle request: ${isNotValid}` });
-      const interestUp = req.body.interest.toUpperCase();
-      const coll = CLIENT_DB.db("Submarine").collection("interests");
-      const ack = await coll.updateOne(
-        { interest: interestUp },
-        { $setOnInsert: { interest: interestUp } },
-        { upsert: true }
-      );
+const handler = nextConnect();
 
-      res.status(200).send(ack);
-      return;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      return CLIENT_DB.close();
-    }
+handler.use(middleware);
+
+handler.post(async (req, res) => {
+  try {
+    const isNotValid = validateBody(req.body);
+    if (isNotValid)
+      return res
+        .status(405)
+        .send({ message: `Could not handle request: ${isNotValid}` });
+    const interestUp = req.body.interest.toUpperCase();
+    const coll = req.body.db.collection("interests");
+    const ack = await coll.updateOne(
+      { interest: interestUp },
+      { $setOnInsert: { interest: interestUp } },
+      { upsert: true }
+    );
+    return res.status(200).send(ack);
+  } catch (error) {
+    return res.status(404).send(error);
   }
-}
+});
 
 function validateBody(body) {
   if (!body.interest) return "No interest array was passed";
   return null;
 }
+
+export default handler;
