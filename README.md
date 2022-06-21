@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Try the App
 
-You can visit the deployed app here: [https://dating-app-six.vercel.app/](Submarine Dating)
+You can visit the deployed app here: [Submarine Dating](https://dating-app-six.vercel.app/)
 
 ### Landing Page
 
