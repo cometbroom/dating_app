@@ -71,6 +71,7 @@ handler.get(async (req, res) => {
     const foundInterests = await collInts
       .find({ _id: { $in: interestIds } })
       .toArray();
+
     return res.status(200).json({
       name: getUser[0].name,
       img: getUser[0].img,

@@ -124,7 +124,10 @@ export default function ApplicationLayout(props) {
                 <List>
                   {LIST_ITEMS.map((item, index) => (
                     <ListItem key={index} disablePadding>
-                      <ListItemButton href={item.link}>
+                      <ListItemButton
+                        href={item.link}
+                        disabled={index === 0 ? false : true}
+                      >
                         <motion.div
                           style={{
                             display: "flex",

@@ -20,7 +20,7 @@ import LogoIcon from "../components/LogoIcon";
 import { AnimatePresence, motion } from "framer-motion";
 
 const drawerWidth = 240;
-const navItems = ["Home", "Testimonials", "Pricing"];
+const navItems = ["Home", "Testimonials"];
 
 export default function LandingLayout(props) {
   const { window } = props;

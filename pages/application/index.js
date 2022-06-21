@@ -8,14 +8,14 @@ export default function IndexApp() {
   const [data, loading, error] = useFetch("api/profiles");
 
   return (
-    <ApplicationLayout>
-      <ErrorProvider error={error} loading={loading}>
+    <ErrorProvider error={error} loading={loading}>
+      <ApplicationLayout>
         {data && (
           <PaginationProvider idx={data.index}>
             <MatchView />
           </PaginationProvider>
         )}
-      </ErrorProvider>
-    </ApplicationLayout>
+      </ApplicationLayout>
+    </ErrorProvider>
   );
 }

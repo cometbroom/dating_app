@@ -13,15 +13,16 @@ export default function ErrorProvider(props) {
     <>
       {props.error && navigate(GET_ERROR_PATH(props.error))}
       {props.loading ? (
-        <CircularProgress
-          sx={{
+        <div
+          style={{
             display: "flex",
-            height: "100%",
-            width: "100%",
+            height: "100vh",
             alignItems: "center",
             justifyContent: "center",
           }}
-        />
+        >
+          <CircularProgress />
+        </div>
       ) : (
         props.children
       )}

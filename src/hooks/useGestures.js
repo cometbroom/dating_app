@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-// Taken from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+// Taken and adapted into hook from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 
-export default function useGestures(swipeLeft, swipeRight) {
+export default function useGestures(context, swipeLeft, swipeRight) {
   var xDown = null;
   var yDown = null;
 
@@ -31,7 +31,6 @@ export default function useGestures(swipeLeft, swipeRight) {
     var yDiff = yDown - yUp;
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
-      /*most significant*/
       if (xDiff > 0) {
         /* left swipe */
         swipeLeft();
@@ -58,5 +57,5 @@ export default function useGestures(swipeLeft, swipeRight) {
       document.removeEventListener("touchstart", handleTouchStart, false);
       document.removeEventListener("touchmove", handleTouchMove, false);
     };
-  }, []);
+  }, [context]);
 }

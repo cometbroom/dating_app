@@ -60,7 +60,7 @@ export default function MatchView() {
       }
     };
   }
-  useGestures(directionalNav("right"), directionalNav("left"));
+  useGestures(context, directionalNav("right"), directionalNav("left"));
 
   return (
     <Grid
