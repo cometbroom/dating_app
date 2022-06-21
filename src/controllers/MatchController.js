@@ -19,7 +19,7 @@ export default function MatchController() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ interest }),
+      body: JSON.stringify({ interest: interest || 0 }),
     });
   }
 
