@@ -42,9 +42,9 @@ function affinityCounter(array1, array2) {
   return affinity;
 }
 
-async function matches(client, interests) {
+async function matches(db, interests) {
   try {
-    const coll = client.db("Submarine").collection("users");
+    const coll = db.collection("users");
     const foundDocs = await coll
       .aggregate(matchesAggregation(interests))
       .toArray();
