@@ -4,7 +4,6 @@ import styles from "../../styles/MatchView.module.css";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { motion } from "framer-motion";
-import { COLORS } from "../tools/constants";
 
 const HOVER_WIDTH = 10;
 const CSS_PROPS = {

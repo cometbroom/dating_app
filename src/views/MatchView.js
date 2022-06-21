@@ -1,10 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import DirectionNav from "../components/DirectionNav";
 import { motion, useAnimation } from "framer-motion";
 import MatchController from "../controllers/MatchController";
 import { PaginationContext } from "../contexts/PaginationContext";
 import { ANIMATIONS } from "../tools/constants";
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import useGestures from "../hooks/useGestures";
+import TOUCH from "../tools/touchEvents";
 
 const LEFT_HIDDEN = "-200%";
 const RIGHT_HIDDEN = "200%";
@@ -40,8 +42,6 @@ export default function MatchView() {
   const [context, setContext] = useContext(PaginationContext);
   const controls = useAnimation();
 
-  //await controls.start({ left: "-200%", transition: { duration: 1 } });
-
   function directionalNav(direction) {
     return async () => {
       switch (direction) {
@@ -61,6 +61,7 @@ export default function MatchView() {
       }
     };
   }
+  useGestures(directionalNav("right"), directionalNav("left"));
 
   return (
     <Grid
@@ -74,7 +75,7 @@ export default function MatchView() {
     >
       {matches && (
         <Grid item md={smallerScreen ? 2 : 3}>
-          <div onClick={directionalNav("left")}>
+          <div style={{ height: "100%" }} onClick={directionalNav("left")}>
             <DirectionNav direction="left" />
           </div>
         </Grid>
@@ -91,7 +92,7 @@ export default function MatchView() {
       </Grid>
       {matches && (
         <Grid item md={smallerScreen ? 2 : 3}>
-          <div onClick={directionalNav("right")}>
+          <div style={{ height: "100%" }} onClick={directionalNav("right")}>
             <DirectionNav direction="right" />
           </div>
         </Grid>
