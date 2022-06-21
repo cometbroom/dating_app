@@ -4,7 +4,62 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 You can visit the deployed app here: [https://dating-app-six.vercel.app/](Submarine Dating)
 
-## Getting Started
+### Landing Page
+
+<img src="./assets/Landing.PNG" alt="drawing" width="400"/>
+
+### Application Page
+
+<img src="./assets/AppPage.PNG" alt="drawing" width="400"/>
+
+
+As you can see you can swipe on potential connections based on interest.
+
+## Code structure
+```
+.
+├── middleware/
+│   └── middleware for next
+├── pages/
+│   ├── api/
+│   │   └── ...endpoints
+│   └── ...routes
+├── public/
+│   └── ...assets (e.g svg, img)
+├── src/
+│   ├── backend/
+│   │   └── ...algorithms for the backend
+│   ├── components/
+│   │   └── ...simple components
+│   ├── contexts/
+│   │   └── ...Context API
+│   ├── controllers/
+│   │   └── ...Data interactive
+│   ├── hooks
+│   ├── layouts/
+│   │   └── ...web section layouts
+│   ├── tools
+│   └── views/
+│       └── ...advanced render functions
+└── styles/
+    └── ...style modules
+
+```
+
+## Libraries
+
+- **MUI**: Material UI as design foundation.
+- **Emotion**: Dependency for Styling with MUI.
+- **SVGR**: SVG file loading.
+- **Classnames**: To pass multiple classnames to components.
+- **Dotenv**: Environment variables.
+- **Framer-motion**: Animation.
+- **Mongodb**: NoSQL db.
+- **Next-connect**: Middleware and better endpoints.
+- **Next-SEO**: Search engine optimization.
+- **node-fetch**: Fetch on the backend.
+
+## Get involved
 
 First, run the development server:
 
@@ -16,19 +71,15 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Requirements
 
+- [x] The app needs to have multiple pages and use client-side routing
+- [x] The app should make use of the Context API or use custom hooks
+- [x] You can use an API that you have built
+- [x] You should not use class components
+- [x] Follow the guidelines for technical assignments
 
-## Learn More
+### Bonus
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Having a backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
