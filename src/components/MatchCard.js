@@ -34,6 +34,11 @@ export default function MatchCard({
     setInterest(value);
   }
 
+  useEffect(() => {
+    console.log("Match card startup", dataInterest);
+    setInterest(dataInterest);
+  }, []);
+
   //Effect to keep my ref updated so I can send it without closure to cleanup
   useEffect(() => {
     interestRef.current = interest;
@@ -42,6 +47,7 @@ export default function MatchCard({
   useEffect(() => {
     return function () {
       //Send interest to server.
+      console.log("cleanup", interestRef.current);
       sendInterest(interestRef.current);
     };
   }, []);

@@ -53,15 +53,20 @@ handler.get(async (req, res) => {
   try {
     const coll = req.db.collection("users");
     const collInts = req.db.collection("interests");
+
+    const foundUser = await coll.findOne({ _id: ObjectId(LOGGED_IN_USER) });
+
+    const pagination = req.query.page - foundUser.index;
+
+    await coll.updateOne(
+      { _id: new ObjectId(LOGGED_IN_USER) },
+      { $inc: { index: foundUser.index + pagination <= 0 ? 0 : pagination } }
+    );
+
+    if (!foundUser) return res.status(404).json({ msg: "User not logged in." });
     const foundDocs = await coll
       .aggregate(NEXT_AGGREGATION(LOGGED_IN_USER))
       .toArray();
-    if (!foundDocs) return res.status(404).json({ msg: "User not logged in." });
-    await coll.updateOne(
-      { _id: new ObjectId(LOGGED_IN_USER) },
-      { $inc: { index: 1 } }
-    );
-
     const getUser = await coll
       .aggregate(PROFILE_AGGREGATION(foundDocs[0]._id))
       .toArray();

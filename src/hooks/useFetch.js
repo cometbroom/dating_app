@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useFetch(url = "") {
+function useFetch(url = "", options) {
   const [data, setData] = useState();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ function useFetch(url = "") {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(url)
+    fetch(url, options)
       .then((response) => {
         if (response.status === 200) return response.json();
         else setError(`Error status: ${response.status}`);

@@ -7,6 +7,27 @@ import SONAR from "../../../src/backend/SONAR";
 
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
+import { LOGGED_IN_USER } from "../../../src/tools/constants";
+
+const CURRENT_MATCH = (id) => [
+  {
+    $match: {
+      _id: new ObjectId(id),
+    },
+  },
+  {
+    $project: {
+      matches: {
+        $arrayElemAt: ["$matches", "$index"],
+      },
+    },
+  },
+  {
+    $project: {
+      _id: "$matches._id",
+    },
+  },
+];
 
 const handler = nextConnect();
 
@@ -52,12 +73,32 @@ handler.post(async (req, res) => {
   }
 });
 
+handler.put(async (req, res) => {
+  try {
+    if (!req.body.interest)
+      return res.status(400).json({ msg: "No interest value gotten" });
+    const coll = req.db.collection("users");
+    const currentUser = await coll.findOne({
+      _id: new ObjectId(LOGGED_IN_USER),
+    });
+
+    const ack = await coll.updateOne(
+      { _id: new ObjectId(LOGGED_IN_USER), matches: { $elemMatch: {} } },
+      {
+        $set: { [`matches.${currentUser.index}.interest`]: req.body.interest },
+      }
+    );
+    console.log(ack, currentUser.index);
+    return res.status(200).json(ack);
+  } catch (error) {
+    return res.status(404).json({ msg: error });
+  }
+});
+
 function validateBody(body) {
   if (!body.name) return "Enter a proper name";
-  if (typeof body.interests === undefined)
-    return "Not interests array was passed";
-  if (typeof body.profileImg === undefined)
-    return "No profile image was passed";
+  if (body.interests == undefined) return "No interests array was passed";
+  if (!body.img) return "No profile image was passed";
   return null;
 }
 

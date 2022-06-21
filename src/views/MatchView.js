@@ -39,27 +39,15 @@ export default function MatchView() {
 
   //await controls.start({ left: "-200%", transition: { duration: 1 } });
 
-  const reduceDbIndex = async function () {
-    try {
-      await fetch("api/profiles/0", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
-  };
-
   function directionalNav(direction) {
     console.log(context);
     return async () => {
       switch (direction) {
         case "left":
-          if (context === 0) return;
+          if (context < 0) return;
           await controls.start("hiddenR");
           controls.set("hiddenL");
           setContext(context - 1);
-          await reduceDbIndex();
           controls.start("visible");
           break;
         case "right":

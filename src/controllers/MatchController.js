@@ -6,16 +6,21 @@ import ErrorProvider from "../tools/ErrorProvider";
 
 export default function MatchController() {
   const [page, setPage] = useContext(PaginationContext);
-  const [data, loading, error] = useFetch(`api/profiles/${page + 1}`);
+  const [data, loading, error] = useFetch(`api/profiles/${page + 1}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   function sendInterest(interest) {
-    // fetch("api/users/62b0b0b91199f720c21ce3d5", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ id: "62b0a66d1199f720c21ce1e0" }),
-    // });
+    fetch("api/users", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ interest }),
+    });
   }
 
   return (
@@ -25,7 +30,7 @@ export default function MatchController() {
           <MatchCard
             img={data.img}
             title={data.name}
-            dataInterest={parseInt(data.interest, 10) || 0}
+            dataInterest={parseInt(data.interest)}
             sendInterest={sendInterest}
           ></MatchCard>
         )}

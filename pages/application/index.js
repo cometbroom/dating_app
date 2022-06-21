@@ -1,9 +1,7 @@
 import ApplicationLayout from "../../src/Layouts/ApplicationLayout";
-import MatchCard from "../../src/components/MatchCard";
 import useFetch from "../../src/hooks/useFetch";
 import MatchView from "../../src/views/MatchView";
 import PaginationProvider from "../../src/contexts/PaginationContext";
-import { useState } from "react";
 import ErrorProvider from "../../src/tools/ErrorProvider";
 
 export default function IndexApp() {
