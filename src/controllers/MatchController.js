@@ -3,6 +3,7 @@ import MatchCard from "../components/MatchCard";
 import { PaginationContext } from "../contexts/PaginationContext";
 import useFetch from "../hooks/useFetch";
 import ErrorProvider from "../tools/ErrorProvider";
+import { motion } from "framer-motion";
 
 export default function MatchController() {
   const [page, setPage] = useContext(PaginationContext);
@@ -32,6 +33,7 @@ export default function MatchController() {
             title={data.name}
             dataInterest={parseInt(data.interest)}
             sendInterest={sendInterest}
+            matchInterests={data.interests}
           ></MatchCard>
         )}
       </ErrorProvider>

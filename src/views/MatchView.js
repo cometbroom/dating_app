@@ -27,6 +27,7 @@ const animLR = {
     left: RIGHT_HIDDEN,
     transform: `rotate(${DEGREES}deg)`,
     opacity: 0,
+
     transition: { duration: ANIMATIONS.swipeDuration },
   },
 };
@@ -34,13 +35,14 @@ const animLR = {
 export default function MatchView() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const smallerScreen = useMediaQuery(theme.breakpoints.down("lg"));
+
   const [context, setContext] = useContext(PaginationContext);
   const controls = useAnimation();
 
   //await controls.start({ left: "-200%", transition: { duration: 1 } });
 
   function directionalNav(direction) {
-    console.log(context);
     return async () => {
       switch (direction) {
         case "left":
@@ -71,13 +73,13 @@ export default function MatchView() {
       }}
     >
       {matches && (
-        <Grid item md={3}>
+        <Grid item md={smallerScreen ? 2 : 3}>
           <div onClick={directionalNav("left")}>
             <DirectionNav direction="left" />
           </div>
         </Grid>
       )}
-      <Grid item md={6}>
+      <Grid item md={smallerScreen ? 8 : 6}>
         <motion.div
           style={{ position: "relative", zIndex: 5 }}
           variants={animLR}
@@ -88,7 +90,7 @@ export default function MatchView() {
         </motion.div>
       </Grid>
       {matches && (
-        <Grid item md={3}>
+        <Grid item md={smallerScreen ? 2 : 3}>
           <div onClick={directionalNav("right")}>
             <DirectionNav direction="right" />
           </div>

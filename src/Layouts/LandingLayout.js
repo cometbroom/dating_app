@@ -17,6 +17,7 @@ import {
 
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoIcon from "../components/LogoIcon";
+import { AnimatePresence, motion } from "framer-motion";
 
 const drawerWidth = 240;
 const navItems = ["Home", "Testimonials", "Pricing"];
@@ -52,64 +53,71 @@ export default function LandingLayout(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   return (
-    <Container>
-      <Box sx={{ display: "flex" }}>
-        <AppBar component="nav">
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon></MenuIcon>
-            </IconButton>
-            <Toolbar
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "inline-flex" } }}
-            >
-              <LogoIcon></LogoIcon>
+    <AnimatePresence>
+      <Container
+        component={motion.div}
+        sx={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 1 } }}
+        exit={{ opacity: 0 }}
+      >
+        <Box sx={{ display: "flex" }}>
+          <AppBar component="nav">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon></MenuIcon>
+              </IconButton>
+              <Toolbar
+                sx={{ flexGrow: 1, display: { xs: "none", sm: "inline-flex" } }}
+              >
+                <LogoIcon></LogoIcon>
+              </Toolbar>
+              <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                {navItems.map((item) => (
+                  <Button
+                    href={`/${item.toLowerCase()}`}
+                    key={item}
+                    sx={{ color: "#fff" }}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </Box>
             </Toolbar>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              {navItems.map((item) => (
-                <Button
-                  href={`/${item.toLowerCase()}`}
-                  key={item}
-                  sx={{ color: "#fff" }}
-                >
-                  {item}
-                </Button>
-              ))}
-            </Box>
-          </Toolbar>
-        </AppBar>
-        <Box component="nav">
-          <Drawer
-            container={container}
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            // Not sure about the reason for this one
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-          >
-            {drawer}
-          </Drawer>
+          </AppBar>
+          <Box component="nav">
+            <Drawer
+              container={container}
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              // Not sure about the reason for this one
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Box>
+          <Box component="main" sx={{ p: 3 }}>
+            <Toolbar />
+            {props.children}
+          </Box>
         </Box>
-        <Box component="main" sx={{ p: 3 }}>
-          <Toolbar />
-          {props.children}
-        </Box>
-      </Box>
-    </Container>
+      </Container>
+    </AnimatePresence>
   );
 }
 
