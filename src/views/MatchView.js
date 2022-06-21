@@ -6,7 +6,6 @@ import { PaginationContext } from "../contexts/PaginationContext";
 import { ANIMATIONS } from "../tools/constants";
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import useGestures from "../hooks/useGestures";
-import TOUCH from "../tools/touchEvents";
 
 const LEFT_HIDDEN = "-200%";
 const RIGHT_HIDDEN = "200%";
