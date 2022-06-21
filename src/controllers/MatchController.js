@@ -11,7 +11,13 @@ export default function MatchController() {
   );
 
   function sendInterest(interest) {
-    console.log(interest);
+    fetch("api/users/62b0b0b91199f720c21ce3d5", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: "62b0a66d1199f720c21ce1e0" }),
+    });
   }
 
   return (
