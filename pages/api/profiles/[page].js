@@ -46,10 +46,6 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
-  // if (isNotValid)
-  //   return res
-  //     .status(405)
-  //     .send({ message: `Could not handle request: ${isNotValid}` });
   try {
     const coll = req.db.collection("users");
     const collInts = req.db.collection("interests");

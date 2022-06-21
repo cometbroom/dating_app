@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { INTERESTS } from "../../../src/backend/Sonar/interests";
 import "dotenv/config";
 import { ObjectId } from "mongodb";
 import SONAR from "../../../src/backend/SONAR";

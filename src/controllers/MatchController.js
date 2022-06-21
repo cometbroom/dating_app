@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import MatchCard from "../components/MatchCard";
 import { PaginationContext } from "../contexts/PaginationContext";
 import useFetch from "../hooks/useFetch";
 import ErrorProvider from "../tools/ErrorProvider";
-import { motion } from "framer-motion";
 
 export default function MatchController() {
   const [page, setPage] = useContext(PaginationContext);

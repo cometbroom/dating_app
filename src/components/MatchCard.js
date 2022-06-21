@@ -1,6 +1,5 @@
 import {
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -12,7 +11,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import styles from "../../styles/MatchCard.module.css";
 
@@ -33,7 +32,6 @@ const interestAnim = {
 };
 
 export default function MatchCard({
-  sx,
   img,
   title,
   bio,
@@ -122,7 +120,6 @@ export default function MatchCard({
               />
             </motion.div>
           ))}
-          {/* <Chip label="Chip Outlined" variant="outlined" /> */}
         </Stack>
 
         <CardActions>

@@ -17,7 +17,7 @@ import RadarIcon from "@mui/icons-material/Radar";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Paper, useMediaQuery, useTheme } from "@mui/material";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useToggle from "../../src/hooks/useToggle";
 
 const LIST_ITEMS = [
@@ -38,11 +38,6 @@ export default function ApplicationLayout(props) {
   const [barClosed, setBarClosed] = useToggle(true);
 
   const biggerScreens = useMediaQuery(theme.breakpoints.up("md"));
-  const leftBarControls = useAnimation();
-
-  async function closeBarHandler() {
-    await leftBarControls.start(barClosed ? "close" : "open");
-  }
 
   const drawerWidth = biggerScreens ? 240 : 80;
 
@@ -128,12 +123,7 @@ export default function ApplicationLayout(props) {
                 <Divider />
                 <List>
                   {LIST_ITEMS.map((item, index) => (
-                    <ListItem
-                      alignItems="center"
-                      justifyContent="center"
-                      key={index}
-                      disablePadding
-                    >
+                    <ListItem key={index} disablePadding>
                       <ListItemButton href={item.link}>
                         <motion.div
                           style={{
@@ -143,10 +133,6 @@ export default function ApplicationLayout(props) {
                           }}
                           animate={{
                             rotate: index === 0 ? 360 : 0,
-                            color: [
-                              "hsl(128, 100%, 100%)",
-                              "hsl(128, 100%, 50%)",
-                            ],
                             transition: {
                               duration: 1,
                               repeat: 50,
@@ -182,7 +168,6 @@ export default function ApplicationLayout(props) {
           transition: { duration: BAR_DURATION },
         }}
       >
-        {/* <Toolbar sx={{ p: 0 }} /> */}
         <motion.div
           style={{
             opacity: 0,
