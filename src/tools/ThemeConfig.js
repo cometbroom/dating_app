@@ -13,7 +13,7 @@ export default function configurateTheme() {
       },
     },
     typography: {
-      fontFamily: 'Love Ya Like A Sister, Comfortaa, cursive, "Roboto"',
+      fontFamily: 'Love Ya Like A Sister, Comfortaa, Verdana, "Roboto"',
       fontSize: 18,
       fontWeightLight: 300,
       htmlFontSize: 16,

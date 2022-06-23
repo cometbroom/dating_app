@@ -111,7 +111,7 @@ export default function LandingLayout(props) {
               {drawer}
             </Drawer>
           </Box>
-          <Box component="main" sx={{ p: 3 }}>
+          <Box component="main" sx={{ p: 3, width: "100%" }}>
             <Toolbar />
             {props.children}
           </Box>
