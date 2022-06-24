@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Toolbar } from "@mui/material";
 import { useState } from "react";
 
 export default function TabPanel({ tabLabels, tabContent }) {
@@ -9,14 +9,19 @@ export default function TabPanel({ tabLabels, tabContent }) {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <Tabs value={current} onChange={handleChange}>
-        {tabLabels.map((x) => (
-          <Tab label={x} />
+        {tabLabels.map((x, idx) => (
+          <Tab key={idx} label={x} />
         ))}
       </Tabs>
+
       {tabContent.map((y, idx) => (
-        <div hidden={idx !== current} aria-labelledby={`simple-tab-${idx}`}>
+        <div
+          key={idx}
+          hidden={idx !== current}
+          aria-labelledby={`simple-tab-${idx}`}
+        >
           {y}
         </div>
       ))}

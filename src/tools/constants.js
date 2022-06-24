@@ -17,6 +17,18 @@ export const ANIMATIONS = {
   swipeDuration: 0.5,
 };
 
+export const VALIDATION = {
+  name: /^[a-zA-Z'-]+$/,
+  email: /[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/,
+};
+
 export const LOGGED_IN_USER = "62b17e42e8d61e12618a5626";
+
+export const INTERESTS = [
+  "Ping Pong",
+  "Video Games",
+  "Hacking",
+]
 
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

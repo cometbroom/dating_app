@@ -60,7 +60,14 @@ export default function LandingLayout(props) {
         animate={{ opacity: 1, transition: { duration: 1 } }}
         exit={{ opacity: 0 }}
       >
-        <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            justifyContent: "center",
+          }}
+        >
           <AppBar component="nav">
             <Toolbar>
               <IconButton

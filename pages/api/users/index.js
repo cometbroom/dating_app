@@ -6,7 +6,7 @@ import SONAR from "../../../src/backend/SONAR";
 
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
-import { LOGGED_IN_USER } from "../../../src/tools/constants";
+import { LOGGED_IN_USER, VALIDATION } from "../../../src/tools/constants";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -39,11 +39,12 @@ handler.post(async (req, res) => {
     // await CLIENT_DB.connect();
     // const result = await populateDB(req.db);
     // return res.status(200).send(result);
-    const isNotValid = validateBody(req.body);
-    if (isNotValid)
-      return res
-        .status(405)
-        .send({ message: `Could not handle request: ${isNotValid}` });
+    // const isNotValid = validateBody(req.body);
+    // if (isNotValid)
+    //   return res
+    //     .status(405)
+    //     .send({ message: `Could not handle request: ${isNotValid}` });
+    return res.status(200).json({ body: req.body });
     const collInts = req.db.collection("interests");
     //Upper case insensitivity
     const interests = req.body.interests.map((x) => x.toUpperCase());
@@ -95,9 +96,12 @@ handler.put(async (req, res) => {
 });
 
 function validateBody(body) {
-  if (!body.name) return "Enter a proper name";
-  if (body.interests == undefined) return "No interests array was passed";
-  if (!body.img) return "No profile image was passed";
+  if (!body.name || !body.name.match(VALIDATION.name))
+    return "Enter a proper name";
+  if (!body.email || !body.email.match(VALIDATION.email))
+    return "Enter a proper email";
+  if (!body.password || !body.password.match(VALIDATION.password))
+    return "Enter a proper password";
   return null;
 }
 
