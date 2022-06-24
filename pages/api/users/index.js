@@ -7,6 +7,7 @@ import SONAR from "../../../src/backend/SONAR";
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
 import { LOGGED_IN_USER, VALIDATION } from "../../../src/tools/constants";
+import { validate } from "../../../src/backend/validation/userSchema";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -44,7 +45,8 @@ handler.post(async (req, res) => {
     //   return res
     //     .status(405)
     //     .send({ message: `Could not handle request: ${isNotValid}` });
-    return res.status(200).json({ body: req.body });
+    const valid = validate(req.body);
+    return res.status(200).json({ valid, errors: validate.errors });
     const collInts = req.db.collection("interests");
     //Upper case insensitivity
     const interests = req.body.interests.map((x) => x.toUpperCase());
