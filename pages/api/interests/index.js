@@ -13,7 +13,6 @@ handler.get(async (req, res) => {
   try {
     const coll = req.db.collection("interests");
     const foundDocs = await coll.find().toArray();
-    console.log(foundDocs);
     return res
       .status(200)
       .json(foundDocs.map((x) => CASING.toTitleCase(x.interest)));

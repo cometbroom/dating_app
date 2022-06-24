@@ -16,6 +16,7 @@ export default function SignupController() {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [valid, setValid] = useState(false);
+  const [interests, setInterests] = useState([]);
 
   function debounce(callFunction, duration = 600) {
     let timerId;
@@ -49,7 +50,7 @@ export default function SignupController() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, interests }),
     });
     const data = await response.json();
     console.log(data);
@@ -58,7 +59,11 @@ export default function SignupController() {
   return (
     <>
       <Stack spacing={2}>
-        <InterestsInput placeholder="Add a few interests" />
+        <InterestsInput
+          placeholder="Add a few interests"
+          setValues={setInterests}
+          values={interests}
+        />
         <TextField
           required
           error={checkName()}
