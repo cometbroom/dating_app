@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import TabPanel from "../components/TabPanel";
+import LoginController from "../controllers/LoginController";
 import SignupController from "../controllers/SignupController";
 
 export default function SignupView() {
@@ -28,7 +29,7 @@ export default function SignupView() {
           tabLabels={["Sign up", "Login"]}
           tabContent={[
             <SignupController key={0} />,
-            <Typography key={1}>Login content</Typography>,
+            <LoginController key={1} />,
           ]}
         />
       </Grid>

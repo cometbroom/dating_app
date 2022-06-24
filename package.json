@@ -23,7 +23,8 @@
     "next-seo": "^5.4.0",
     "node-fetch": "^3.2.6",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "next-auth": "latest"
   },
   "devDependencies": {
     "eslint": "8.17.0",
