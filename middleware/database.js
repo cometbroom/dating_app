@@ -9,12 +9,12 @@ if (!process.env.MONGODB_URI) {
 
 //wn should I use new url parser? or unified topology?+
 //const client = new MongoClient(process.env.MONGODB_URI);
-const client = new MongoClient(process.env.MONGODB_URI);
+export const db_client = new MongoClient(process.env.MONGODB_URI);
 
 async function database(req, res, next) {
-  await client.connect();
-  req.dbClient = client;
-  req.db = client.db("Submarine");
+  await db_client.connect();
+  req.dbClient = db_client;
+  req.db = db_client.db("Submarine");
   return next();
 }
 

@@ -8,6 +8,9 @@ import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
 import { LOGGED_IN_USER, VALIDATION } from "../../../src/tools/constants";
 import { validate } from "../../../src/backend/validation/userSchema";
+import saltHashPassword, {
+  getHash,
+} from "../../../src/backend/authentication/crypto";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -37,14 +40,6 @@ handler.use(middleware);
 //find one limit 1 or skip 1 to get to your page.
 handler.post(async (req, res) => {
   try {
-    // await CLIENT_DB.connect();
-    // const result = await populateDB(req.db);
-    // return res.status(200).send(result);
-    // const isNotValid = validateBody(req.body);
-    // if (isNotValid)
-    //   return res
-    //     .status(405)
-    //     .send({ message: `Could not handle request: ${isNotValid}` });
     const valid = validate(req.body);
     if (!valid) return res.status(400).json(validate.errors);
 
@@ -58,21 +53,34 @@ handler.post(async (req, res) => {
     //Find matches according to interest
     const matches = await SONAR.matches(req.db, foundDocs);
 
+    const passwordSH = saltHashPassword(req.body.password);
+
     //Insert user with interests and matches
     const ack = await req.db.collection("users").insertOne({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
       interests: foundDocs,
       matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
       profileImg: req.body.img || "",
       index: 0,
+      ...passwordSH,
     });
     res.status(200).send(ack.insertedId);
     return;
   } catch (error) {
     console.error(error);
   }
+});
+
+handler.get(async (req, res) => {
+  try {
+    const coll = req.db.collection("users");
+    const foundDoc = await coll.findOne({ email: req.body.email });
+    const calculatedHash = getHash(req.body.password, foundDoc.passwordSalt);
+    if (calculatedHash.passwordHash === foundDoc.passwordHash)
+      return res.status(200).json({ msg: "User logged in" });
+    else return res.status(401).json({ msg: "Unauthorized" });
+  } catch (error) {}
 });
 
 handler.put(async (req, res) => {
