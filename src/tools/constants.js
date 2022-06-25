@@ -25,6 +25,18 @@ export const VALIDATION = {
 
 export const LOGGED_IN_USER = "62b17e42e8d61e12618a5626";
 
-export const INTERESTS = ["Ping Pong", "Video Games", "Hacking"];
+export const INTERESTS = [
+  "PING PONG",
+  "VIDEO GAMES",
+  "HACKING",
+  "TENNIS",
+  "SWIMMING",
+  "TRAVEL",
+  "ADVENTURE",
+  "COOKING",
+  "DRAWING",
+  "SINGING",
+  "PROGRAMMING",
+];
 
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

@@ -46,14 +46,12 @@ handler.post(async (req, res) => {
     //     .status(405)
     //     .send({ message: `Could not handle request: ${isNotValid}` });
     const valid = validate(req.body);
-    return res.status(200).json({ valid, errors: validate.errors });
-    const collInts = req.db.collection("interests");
-    //Upper case insensitivity
-    const interests = req.body.interests.map((x) => x.toUpperCase());
+    if (!valid) return res.status(400).json(validate.errors);
 
+    const collInts = req.db.collection("interests");
     //find interest id's by name
     const foundDocs = await collInts
-      .find({ interest: { $in: interests } })
+      .find({ interest: { $in: req.body.interests } })
       .map((m) => m._id)
       .toArray();
 
@@ -63,9 +61,11 @@ handler.post(async (req, res) => {
     //Insert user with interests and matches
     const ack = await req.db.collection("users").insertOne({
       name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
       interests: foundDocs,
       matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
-      profileImg: req.body.img,
+      profileImg: req.body.img || "",
       index: 0,
     });
     res.status(200).send(ack.insertedId);

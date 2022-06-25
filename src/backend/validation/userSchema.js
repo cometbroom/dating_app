@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+import { INTERESTS } from "../../tools/constants";
 const ajv = new Ajv();
 
 const userSchema = {
@@ -25,17 +26,14 @@ const userSchema = {
       type: "array",
       maxItems: 6,
       minItems: 2,
-      items: { type: "string" },
+      items: { type: "string", enum: INTERESTS },
       uniqueItems: true,
     },
   },
   required: ["name", "email", "password", "interests"],
 };
 
-console.log("Don't be");
-
 function handler() {
-  console.log("compile called");
   return ajv.compile(userSchema);
 }
 
