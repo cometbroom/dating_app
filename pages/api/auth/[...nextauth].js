@@ -24,6 +24,7 @@ export const AUTH_OPTIONS = {
           throw new Error("Password doesnt match");
 
         return {
+          id: result._id,
           name: result.name,
           email: result.email,
           image: result.profileImg,
@@ -32,6 +33,17 @@ export const AUTH_OPTIONS = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      // Persist the OAuth access_token to the token right after signin
+      user && (token.userId = user.id);
+      return token;
+    },
+    session: async ({ session, token }) => {
+      session.user.id = token.userId;
+      return session;
+    },
+  },
   // callbacks: {
   //   async jwt({ token }) {
   //     token.userRole = "admin";

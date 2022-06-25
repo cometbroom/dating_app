@@ -53,7 +53,6 @@ export default function SignupController() {
       body: JSON.stringify({ name, email, password, interests }),
     });
     const data = await response.json();
-    console.log(data);
   }
 
   return (

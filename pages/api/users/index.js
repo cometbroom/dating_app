@@ -11,6 +11,11 @@ import { validate } from "../../../src/backend/validation/userSchema";
 import saltHashPassword, {
   getHash,
 } from "../../../src/backend/authentication/crypto";
+import { HttpResponder } from "../../../src/tools/HttpResponder";
+import { unstable_getServerSession } from "next-auth/next";
+import { AUTH_OPTIONS } from "../auth/[...nextauth]";
+import { validateInterest } from "../../../src/backend/validation/interestSchema";
+import { validateIntPoint } from "../../../src/backend/validation/pointSchema";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -41,36 +46,56 @@ handler.use(middleware);
 handler.post(async (req, res) => {
   try {
     const valid = validate(req.body);
-    if (!valid) return res.status(400).json(validate.errors);
+    if (!valid)
+      return HttpResponder.BAD_REQ(res, { msg: validate.errors[0].message });
 
+    const usersColl = req.db.collection("users");
+
+    const checkIfUserExists = await usersColl.findOne({
+      email: req.body.email,
+    });
+
+    if (checkIfUserExists)
+      return HttpResponder.CONFLICT(res, { msg: "User already exists." });
+
+    const interests = await getInterests(req);
+
+    //Find matches according to interest
+    const matches = await SONAR.matches(req.db, interests);
+
+    const passwordSH = saltHashPassword(req.body.password);
+
+    //Insert user with interests and matches
+    const ack = await usersColl.insertOne({
+      name: req.body.name,
+      email: req.body.email,
+      interests,
+      matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
+      profileImg: req.body.img || "",
+      index: 0,
+      ...passwordSH,
+    });
+    return HttpResponder.CREATED(res, ack.insertedId);
+  } catch (error) {
+    HttpResponder.NOT_FOUND(res, {
+      msg: error.message,
+    });
+  }
+});
+
+async function getInterests(req) {
+  try {
     const collInts = req.db.collection("interests");
     //find interest id's by name
     const foundDocs = await collInts
       .find({ interest: { $in: req.body.interests } })
       .map((m) => m._id)
       .toArray();
-
-    //Find matches according to interest
-    const matches = await SONAR.matches(req.db, foundDocs);
-
-    const passwordSH = saltHashPassword(req.body.password);
-
-    //Insert user with interests and matches
-    const ack = await req.db.collection("users").insertOne({
-      name: req.body.name,
-      email: req.body.email,
-      interests: foundDocs,
-      matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
-      profileImg: req.body.img || "",
-      index: 0,
-      ...passwordSH,
-    });
-    res.status(200).send(ack.insertedId);
-    return;
+    return foundDocs;
   } catch (error) {
-    console.error(error);
+    throw new Error("Could not find interests.");
   }
-});
+}
 
 handler.get(async (req, res) => {
   try {
@@ -78,42 +103,38 @@ handler.get(async (req, res) => {
     const foundDoc = await coll.findOne({ email: req.body.email });
     const calculatedHash = getHash(req.body.password, foundDoc.passwordSalt);
     if (calculatedHash.passwordHash === foundDoc.passwordHash)
-      return res.status(200).json({ msg: "User logged in" });
-    else return res.status(401).json({ msg: "Unauthorized" });
+      return HttpResponder.OK(res, { msg: "User logged in" });
+    else return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
   } catch (error) {}
 });
 
 handler.put(async (req, res) => {
   try {
-    if (req.body.interest === undefined)
-      return res.status(400).json({ msg: "No interest value gotten" });
+    const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
+    if (!session)
+      return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
+    const valid = validateIntPoint(req.body);
+    if (!valid)
+      return HttpResponder.BAD_REQ(res, {
+        msg: validateIntPoint.errors[0].message,
+      });
     const coll = req.db.collection("users");
 
     const currentUser = await coll.findOne({
-      _id: new ObjectId(LOGGED_IN_USER),
+      _id: new ObjectId(session.user.id),
     });
 
     const ack = await coll.updateOne(
-      { _id: new ObjectId(LOGGED_IN_USER) },
+      { _id: new ObjectId(session.user.id) },
       {
         $set: { [`matches.${currentUser.index}.interest`]: req.body.interest },
       }
     );
-    return res.status(200).json(ack);
+    return HttpResponder.OK(res, { msg: "Interest added." });
   } catch (error) {
-    return res.status(404).json({ msg: error });
+    return HttpResponder.BAD_REQ(res, { msg: error.message });
   }
 });
-
-function validateBody(body) {
-  if (!body.name || !body.name.match(VALIDATION.name))
-    return "Enter a proper name";
-  if (!body.email || !body.email.match(VALIDATION.email))
-    return "Enter a proper email";
-  if (!body.password || !body.password.match(VALIDATION.password))
-    return "Enter a proper password";
-  return null;
-}
 
 //To populate db again stay away from
 const rand = (max) => Math.floor(Math.random() * max);
