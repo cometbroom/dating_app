@@ -17,6 +17,26 @@ export const ANIMATIONS = {
   swipeDuration: 0.5,
 };
 
-export const LOGGED_IN_USER = "62b17e42e8d61e12618a5626";
+export const VALIDATION = {
+  name: /^[a-zA-Z'-]+$/,
+  email: /[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$/,
+  password: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$/,
+};
+
+export const LOGGED_IN_USER = "62b6b5ac6397ae593e2fff12";
+
+export const INTERESTS = [
+  "PING PONG",
+  "VIDEO GAMES",
+  "HACKING",
+  "TENNIS",
+  "SWIMMING",
+  "TRAVEL",
+  "ADVENTURE",
+  "COOKING",
+  "DRAWING",
+  "SINGING",
+  "PROGRAMMING",
+];
 
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

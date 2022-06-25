@@ -17,7 +17,7 @@ function useFetch(url = "", options) {
         setData(data);
       })
       .catch((error) => {
-        setError(<p>Failed to fetch data</p>);
+        setError("Failed to fetch data");
       })
       .finally(() => setLoading(false));
   }, [url]);

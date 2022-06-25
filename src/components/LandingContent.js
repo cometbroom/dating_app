@@ -1,7 +1,20 @@
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { getSession } from "next-auth/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import useSession from "../hooks/useSession";
 
 export default function LandingContent() {
   const GetImageBg = () => <img src="/eezy_24.svg" />;
+  const [session, loading, error] = useSession();
 
   return (
     <>
@@ -39,9 +52,13 @@ export default function LandingContent() {
           item
           xs={12}
         >
-          <Button variant="contained" href="/application/">
-            Get Started
-          </Button>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Link href={session ? "/application/" : "/signup/"}>
+              <Button variant="contained">Get Started</Button>
+            </Link>
+          )}
         </Grid>
       </Grid>
     </>
