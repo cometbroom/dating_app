@@ -12,26 +12,18 @@ export const AUTH_OPTIONS = {
   providers: [
     CredentialsProvider({
       async authorize(credentials, req) {
-        try {
-          db_client.connect();
-          const coll = db_client.db("Submarine").collection("users");
-          //Find user with the email
-          const result = await coll.findOne({
-            email: credentials.email,
-          });
-          if (!result) throw new Error("No user found with the email");
-          const calculatedHash = getHash(
-            req.body.password,
-            result.passwordSalt
-          );
-          if (calculatedHash.passwordHash !== result.passwordHash)
-            throw new Error("Password doesnt match");
+        db_client.connect();
+        const coll = db_client.db("Submarine").collection("users");
+        //Find user with the email
+        const result = await coll.findOne({
+          email: credentials.email,
+        });
+        if (!result) throw new Error("No user found with the email");
+        const calculatedHash = getHash(req.body.password, result.passwordSalt);
+        if (calculatedHash.passwordHash !== result.passwordHash)
+          throw new Error("Password doesnt match");
 
-          return { email: result.email };
-        } catch (error) {
-          console.log(error);
-          throw new Error(error);
-        }
+        return { email: result.email };
       },
     }),
   ],
