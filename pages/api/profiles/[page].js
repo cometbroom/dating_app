@@ -1,8 +1,9 @@
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
 import { ObjectId } from "mongodb";
-import { CASING } from "../../../src/tools/cases";
-import { LOGGED_IN_USER } from "../../../src/tools/constants";
+import { HttpResponder } from "../../../src/tools/HttpResponder";
+import { unstable_getServerSession } from "next-auth/next";
+import { AUTH_OPTIONS } from "../auth/[...nextauth]";
 
 const NEXT_AGGREGATION = (id) => [
   {
@@ -47,21 +48,25 @@ handler.use(middleware);
 
 handler.get(async (req, res) => {
   try {
+    const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
+    if (!session)
+      return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
     const coll = req.db.collection("users");
     const collInts = req.db.collection("interests");
 
-    const foundUser = await coll.findOne({ _id: ObjectId(LOGGED_IN_USER) });
+    const foundUser = await coll.findOne({
+      _id: ObjectId(session.user.id),
+    });
 
     const pagination = req.query.page - foundUser.index;
 
     await coll.updateOne(
-      { _id: new ObjectId(LOGGED_IN_USER) },
+      { _id: new ObjectId(session.user.id) },
       { $inc: { index: foundUser.index + pagination <= 0 ? 0 : pagination } }
     );
 
-    if (!foundUser) return res.status(404).json({ msg: "User not logged in." });
     const foundDocs = await coll
-      .aggregate(NEXT_AGGREGATION(LOGGED_IN_USER))
+      .aggregate(NEXT_AGGREGATION(session.user.id))
       .toArray();
     const getUser = await coll
       .aggregate(PROFILE_AGGREGATION(foundDocs[0]._id))
@@ -72,37 +77,16 @@ handler.get(async (req, res) => {
       .find({ _id: { $in: interestIds } })
       .toArray();
 
-    return res.status(200).json({
+    return HttpResponder.OK(res, {
       name: getUser[0].name,
       img: getUser[0].img,
       interest: foundDocs[0].interest,
-      interests: foundInterests.map((m) => CASING.toTitleCase(m.interest)),
+      interests: foundInterests.map((m) => m.interest),
     });
   } catch (error) {
-    return res.status(404).send(error);
-  }
-});
-
-handler.put(async (req, res) => {
-  try {
-    const coll = req.db.collection("users");
-    const ack = await coll.updateOne(
-      { _id: new ObjectId(LOGGED_IN_USER), index: { $gt: 0 } },
-      { $inc: { index: -2 } }
-    );
-    return res.status(200).send(ack);
-  } catch (error) {
-    return res.status(404).send(error);
+    console.log(error.message);
+    return HttpResponder.NOT_FOUND(error.message);
   }
 });
 
 export default handler;
-
-function validateBody(body) {
-  if (!body.name) return "Enter a proper name";
-  if (typeof body.interests === undefined)
-    return "Not interests array was passed";
-  if (typeof body.profileImg === undefined)
-    return "No profile image was passed";
-  return null;
-}

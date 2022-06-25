@@ -6,7 +6,6 @@ import SONAR from "../../../src/backend/SONAR";
 
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
-import { LOGGED_IN_USER, VALIDATION } from "../../../src/tools/constants";
 import { validate } from "../../../src/backend/validation/userSchema";
 import saltHashPassword, {
   getHash,
@@ -96,17 +95,6 @@ async function getInterests(req) {
     throw new Error("Could not find interests.");
   }
 }
-
-handler.get(async (req, res) => {
-  try {
-    const coll = req.db.collection("users");
-    const foundDoc = await coll.findOne({ email: req.body.email });
-    const calculatedHash = getHash(req.body.password, foundDoc.passwordSalt);
-    if (calculatedHash.passwordHash === foundDoc.passwordHash)
-      return HttpResponder.OK(res, { msg: "User logged in" });
-    else return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
-  } catch (error) {}
-});
 
 handler.put(async (req, res) => {
   try {

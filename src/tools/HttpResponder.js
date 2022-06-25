@@ -30,4 +30,9 @@ export const HttpResponder = {
   CONFLICT: (res, response) => {
     res.status(409).send(response);
   },
+  REDIRECT: (res, to) => {
+    res.writeHead(302, {
+      Location: to,
+    });
+  },
 };
