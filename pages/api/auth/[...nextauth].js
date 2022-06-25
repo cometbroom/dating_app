@@ -23,7 +23,11 @@ export const AUTH_OPTIONS = {
         if (calculatedHash.passwordHash !== result.passwordHash)
           throw new Error("Password doesnt match");
 
-        return { email: result.email };
+        return {
+          name: result.name,
+          email: result.email,
+          image: result.profileImg,
+        };
       },
     }),
   ],

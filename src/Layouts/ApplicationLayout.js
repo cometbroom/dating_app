@@ -16,9 +16,17 @@ import BadgedAvatar from "../components/BadgedAvatar";
 import RadarIcon from "@mui/icons-material/Radar";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Paper, useMediaQuery, useTheme } from "@mui/material";
+import {
+  CircularProgress,
+  Paper,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import useToggle from "../../src/hooks/useToggle";
+import AvatarMenu from "../components/AvatarMenu";
+import { getSession } from "next-auth/react";
+import useSession from "../hooks/useSession";
 
 const LIST_ITEMS = [
   { title: "SONAR", icon: <RadarIcon />, link: "/application/" },
@@ -36,6 +44,7 @@ const barsAnim = {
 export default function ApplicationLayout(props) {
   const theme = useTheme();
   const [barClosed, setBarClosed] = useToggle(true);
+  const [session, loading, error] = useSession();
 
   const biggerScreens = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -102,24 +111,15 @@ export default function ApplicationLayout(props) {
                 animate="open"
                 exit="close"
               >
-                <Toolbar
-                  sx={{
-                    display: "flex",
-                    gap: "5px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <BadgedAvatar
-                    src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
-                    alt="Ali's avatar photo"
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <AvatarMenu
+                    title={session.name}
+                    img={session.image}
+                    biggerScreens={biggerScreens}
                   />
-                  {biggerScreens && (
-                    <>
-                      <Typography variant="caption">Logged in as </Typography>
-                      <Typography variant="caption">Ali</Typography>
-                    </>
-                  )}
-                </Toolbar>
+                )}
                 <Divider />
                 <List>
                   {LIST_ITEMS.map((item, index) => (

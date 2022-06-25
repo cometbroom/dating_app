@@ -23,7 +23,7 @@ export const VALIDATION = {
   password: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$/,
 };
 
-export const LOGGED_IN_USER = "62b17e42e8d61e12618a5626";
+export const LOGGED_IN_USER = "62b6b5ac6397ae593e2fff12";
 
 export const INTERESTS = [
   "PING PONG",

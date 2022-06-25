@@ -4,7 +4,7 @@ import MatchView from "../../src/views/MatchView";
 import PaginationProvider from "../../src/contexts/PaginationContext";
 import ErrorProvider from "../../src/tools/ErrorProvider";
 
-export default function IndexApp() {
+export default function IndexApp({ pageProps }) {
   const [data, loading, error] = useFetch("api/profiles");
 
   return (

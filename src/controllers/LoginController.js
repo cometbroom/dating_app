@@ -32,10 +32,9 @@ export default function LoginController() {
   async function submitForm() {
     if (valid !== true) return;
     const status = await signIn("credentials", {
-      callbackUrl: "/testimonials",
+      callbackUrl: "/application",
       email,
       password,
-      redirect: false,
     });
     console.log(status);
     // const response = await fetch("api/users", {
