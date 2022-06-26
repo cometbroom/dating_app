@@ -1,73 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { getRandomId } from "../public/js/util";
 
-// const audioOnlyConfig = { audio: true, video: false };
-// const userMediaConfig = {
-//   audio: { echoCancellation: true, noiseSuppression: true },
-//   video: { facingMode: "user" },
-// };
-
-// const config = { iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] };
+const config = {
+  iceServers: [
+    { urls: ["stun:stun.l.google.com:19302"] },
+    {
+      urls: "turn:0.peerjs.com:3478",
+      username: "peerjs",
+      credential: "peerjsp",
+    },
+  ],
+  sdpSemantics: "unified-plan",
+  iceTransportPolicy: "relay",
+};
 
 // const localConfig = {
-//   host: "live.democracy.earth",
 //   secure: true,
-//   port: 5000,
-//   path: "/peerjs",
 //   config,
 //   debug: 0, // from 0 up to 3
 // };
 
-export default function usePeer(addRemoteStream, removeRemoteStream) {
-  const [myPeer, setPeer] = useState(null);
-  const [myPeerID, setMyPeerID] = useState(null);
+export default function usePeer(session) {
+  const [peer, setPeer] = useState(null);
 
   const cleanUp = () => {
-    if (myPeer) {
-      myPeer.disconnect();
-      myPeer.destroy();
+    if (peer) {
+      peer.disconnect();
+      peer.destroy();
     }
     setPeer(null);
-    setMyPeerID(null);
   };
 
   useEffect(() => {
-    import("peerjs")
-      .then(() => {
-        const peer = myPeer ? myPeer : new Peer(getRandomId(), localConfig);
+    console.log(session);
 
-        peer.on("open", () => {
+    if (!session) return;
+    // const id = session.peerId;
+    import("peerjs")
+      .then((x) => {
+        const peer = peer ? peer : new x.Peer();
+
+        peer.on("open", (id) => {
+          console.log("opened", id);
           setPeer(peer);
-          setMyPeerID(peer.id);
         });
 
-        peer.on("call", (call) => {
-          console.log("receiving call from " + call.peer);
-
-          navigator.mediaDevices
-            .getUserMedia(userMediaConfig)
-            .then((stream) => {
-              // Answer the call with an A/V stream.
-              call.answer(stream);
-
-              // Play the remote stream
-              call.on("stream", (remoteStream) => {
-                addRemoteStream(remoteStream, call.peer);
-              });
-
-              call.on("close", () => {
-                console.log("The call has ended");
-                removeRemoteStream(call.peer);
-              });
-
-              call.on("error", (error) => {
-                console.log(error);
-                removeRemoteStream(call.peer);
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+        peer.on("connection", (conn) => {
+          conn.on("data", (data) => {
+            console.log(data);
+          });
         });
 
         peer.on("disconnected", () => {
@@ -92,7 +72,7 @@ export default function usePeer(addRemoteStream, removeRemoteStream) {
     return () => {
       cleanUp();
     };
-  }, []);
+  }, [session]);
 
-  return [myPeer, myPeerID];
+  return [peer];
 }

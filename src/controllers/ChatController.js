@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import usePeer from "../hooks/usePeer";
 import useSession from "../hooks/useSession";
 import ChatView from "../views/ChatView";
 
@@ -7,33 +8,30 @@ const history = [
   { sender: "Boom", text: "Hey how you doing?", sent: false },
 ];
 
+function getRandomId() {
+  let min = Math.ceil(10000000);
+  let max = Math.floor(99999999);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function ChatController() {
   const [session, loadSession, errSession] = useSession();
   const [connection, setConnection] = useState();
+  // const [peer] = usePeer(session);
 
-  useEffect(() => {
-    if (!session) return;
-    import("simple-peer").then((x) => {
-      // var peer1 = new x.default({ initiator: true });
-      // var peer2 = new x.default();
-      // peer1.on("signal", (data) => {
-      //   // when peer1 has signaling data, give it to peer2 somehow
-      //   peer2.signal(data);
-      // });
-      // peer2.on("signal", (data) => {
-      //   // when peer2 has signaling data, give it to peer1 somehow
-      //   peer1.signal(data);
-      // });
-      // peer1.on("connect", () => {
-      //   // wait for 'connect' event before using the data channel
-      //   peer1.send("hey peer2, how is it going?");
-      // });
-      // peer2.on("data", (data) => {
-      //   // got a data channel message
-      //   console.log("got a message from peer1: " + data);
-      // });
+  function sendMsg(text) {
+    console.log(text, "will be sent");
+    if (!peer || !session) return;
+    // session.chats[0].peer
+    const conn = peer.connect(text);
+    conn.on("open", () => {
+      console.log("Connection to peer 2 open");
+      conn.send("hi");
     });
-  }, [session]);
+    conn.on("error", (err) => {
+      console.log("this is the error", err);
+    });
+  }
 
   // useEffect(() => {
   //   if (!session) return;
@@ -57,10 +55,6 @@ export default function ChatController() {
   //   });
   // }, [session]);
 
-  useEffect(() => {
-    if (!connection) return;
-    console.log(connection);
-  }, [connection]);
   // const conn = peer.connect("97223302-7d7d-4528-b6ad-5329f3e28836");
   // conn.on("open", () => {
   //   conn.send("hi");
@@ -78,7 +72,11 @@ export default function ChatController() {
   return (
     <>
       {session && (
-        <ChatView connection={connection} history={history}></ChatView>
+        <ChatView
+          sendText={sendMsg}
+          connection={connection}
+          history={history}
+        ></ChatView>
       )}
     </>
   );
