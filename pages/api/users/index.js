@@ -13,8 +13,8 @@ import saltHashPassword, {
 import { HttpResponder } from "../../../src/tools/HttpResponder";
 import { unstable_getServerSession } from "next-auth/next";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]";
-import { validateInterest } from "../../../src/backend/validation/interestSchema";
 import { validateIntPoint } from "../../../src/backend/validation/pointSchema";
+import { v4 as uuidv4 } from "uuid";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -72,6 +72,7 @@ handler.post(async (req, res) => {
       matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
       profileImg: req.body.img || "",
       index: 0,
+      peerId: uuidv4(),
       ...passwordSH,
     });
     return HttpResponder.CREATED(res, ack.insertedId);

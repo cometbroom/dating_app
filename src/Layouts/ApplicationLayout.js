@@ -51,7 +51,12 @@ export default function ApplicationLayout(props) {
   const drawerWidth = biggerScreens ? 240 : 80;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+      }}
+    >
       <AnimatePresence>
         <AppBar
           position="fixed"
@@ -126,7 +131,7 @@ export default function ApplicationLayout(props) {
                     <ListItem key={index} disablePadding>
                       <ListItemButton
                         href={item.link}
-                        disabled={index === 0 ? false : true}
+                        // disabled={index === 0 ? false : true}
                       >
                         <motion.div
                           style={{

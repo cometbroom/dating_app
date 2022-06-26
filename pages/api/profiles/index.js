@@ -14,7 +14,7 @@ handler.get(async (req, res) => {
   if (!session) return res.status(401).json({ msg: "User not logged in" });
   try {
     const coll = req.db.collection("users");
-    const foundDoc = await coll.findOne({ _id: new ObjectId(LOGGED_IN_USER) });
+    const foundDoc = await coll.findOne({ _id: new ObjectId(session.user.id) });
     if (!foundDoc) return res.status(404).json({ msg: "user not found" });
     return res.status(200).json({ index: foundDoc.index });
   } catch (error) {}

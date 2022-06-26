@@ -39,4 +39,9 @@ export const INTERESTS = [
   "PROGRAMMING",
 ];
 
+export const PEER_IDS = {
+  id1: "97223302-7d7d-4528-b6ad-5329f3e28836",
+  id2: "b2d6f0b2-bdf5-4886-9332-5067c8458ad6",
+};
+
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

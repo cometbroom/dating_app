@@ -24,8 +24,11 @@
     "next-connect": "^0.12.2",
     "next-seo": "^5.4.0",
     "node-fetch": "^3.2.6",
+    "peerjs": "^1.4.6",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "simple-peer": "^9.11.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "8.17.0",

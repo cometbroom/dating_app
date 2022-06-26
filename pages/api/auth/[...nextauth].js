@@ -25,6 +25,8 @@ export const AUTH_OPTIONS = {
 
         return {
           id: result._id,
+          peerId: result.peerId,
+          chats: result.chats,
           name: result.name,
           email: result.email,
           image: result.profileImg,
@@ -36,11 +38,16 @@ export const AUTH_OPTIONS = {
   callbacks: {
     async jwt({ token, user }) {
       // Persist the OAuth access_token to the token right after signin
-      user && (token.userId = user.id);
+      user &&
+        ((token.userId = user.id),
+        (token.peerId = user.peerId),
+        (token.chats = user.chats));
       return token;
     },
     session: async ({ session, token }) => {
       session.user.id = token.userId;
+      session.user.peerId = token.peerId;
+      session.user.chats = token.chats;
       return session;
     },
   },
