@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useFetch from "./useFetch";
 
 const config = {
   iceServers: [
@@ -21,6 +22,10 @@ const config = {
 
 export default function usePeer(session) {
   const [peer, setPeer] = useState(null);
+  const [peerId, setPeerId] = useState();
+  const [data, loading, error] = useFetch(`/api/chat/${peerId}`, {
+    method: "POST",
+  });
 
   const cleanUp = () => {
     if (peer) {
@@ -42,6 +47,7 @@ export default function usePeer(session) {
         peer.on("open", (id) => {
           console.log("opened", id);
           setPeer(peer);
+          setPeerId(id);
         });
 
         peer.on("connection", (conn) => {

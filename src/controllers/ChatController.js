@@ -10,21 +10,25 @@ const history = [
 
 export default function ChatController() {
   const [session, loadSession, errSession] = useSession();
-  const [connection, setConnection] = useState();
   const [peer] = usePeer(session);
 
-  function sendMsg(text) {
+  async function sendMsg(text) {
     console.log(text, "will be sent");
     if (!peer || !session) return;
     // session.chats[0].peer
-    const conn = peer.connect(text);
-    conn.on("open", () => {
-      console.log("Connection to peer 2 open");
-      conn.send("hi");
-    });
-    conn.on("error", (err) => {
-      console.log("this is the error", err);
-    });
+    try {
+      const response = await fetch("/api/chat", { method: "GET" });
+      const data = await response.json();
+      const conn = peer.connect(data.id, { metadata: session.name });
+      conn.on("open", () => {
+        conn.send(text);
+      });
+      conn.on("error", (err) => {
+        console.log("this is the error", err);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   // useEffect(() => {
@@ -66,11 +70,7 @@ export default function ChatController() {
   return (
     <>
       {session && (
-        <ChatView
-          sendText={sendMsg}
-          connection={connection}
-          history={history}
-        ></ChatView>
+        <ChatView session={session} sendText={sendMsg} peer={peer}></ChatView>
       )}
     </>
   );

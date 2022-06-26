@@ -9,23 +9,23 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
+  console.log("hety");
+
   try {
     const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
     if (!session)
       return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
     const coll = req.db.collection("users");
-    console.log(session.user.id);
     const foundUser = await coll.findOne({
       _id: new ObjectId(session.user.id),
     });
     if (!foundUser)
       return HttpResponder.NOT_FOUND(res, { msg: "User not found" });
     const peerId = await coll.findOne({ _id: foundUser.chats[0] });
-    return HttpResponder.OK(res, peerId.peerId);
+    return HttpResponder.OK(res, { id: peerId.peerId });
   } catch (error) {
     HttpResponder.BAD_REQ(res, { msg: error.message });
   }
 });
-
 
 export default handler;
