@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { useContext } from "react";
 import MatchCard from "../components/MatchCard";
 import { PaginationContext } from "../contexts/PaginationContext";

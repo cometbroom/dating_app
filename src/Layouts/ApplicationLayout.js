@@ -56,6 +56,7 @@ export default function ApplicationLayout(props) {
       sx={{
         display: "flex",
         minHeight: "100vh",
+        overflow: "hidden",
       }}
     >
       <AnimatePresence>

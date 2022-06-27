@@ -9,6 +9,7 @@ import CommController from "../../src/controllers/CommController";
 import { useState } from "react";
 import useSession from "../../src/hooks/useSession";
 import AudioProvider from "../../src/contexts/AudioContext";
+import { Box } from "@mui/material";
 
 export default function IndexApp({ pageProps }) {
   const [data, loading, error] = useFetch("api/profiles");
@@ -18,17 +19,19 @@ export default function IndexApp({ pageProps }) {
   if (error) signOut({ callbackUrl: "/signup/" });
 
   return (
-    <ErrorProvider error={null} loading={loading}>
-      <AudioProvider peer={peer}>
-        <ApplicationLayout setTab={setTab}>
-          {tab === 0 && data && (
-            <PaginationProvider idx={data.index}>
-              <SonarView />
-            </PaginationProvider>
-          )}
-          {tab === 1 && <CommController session={session} peer={peer} />}
-        </ApplicationLayout>
-      </AudioProvider>
-    </ErrorProvider>
+    <Box sx={{ height: "100vh", overflow: "hidden" }}>
+      <ErrorProvider error={null} loading={loading}>
+        <AudioProvider peer={peer}>
+          <ApplicationLayout setTab={setTab}>
+            {tab === 0 && data && (
+              <PaginationProvider idx={data.index}>
+                <SonarView />
+              </PaginationProvider>
+            )}
+            {tab === 1 && <CommController session={session} peer={peer} />}
+          </ApplicationLayout>
+        </AudioProvider>
+      </ErrorProvider>
+    </Box>
   );
 }

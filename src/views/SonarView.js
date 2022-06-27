@@ -1,11 +1,12 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import DirectionNav from "../components/DirectionNav";
 import { motion, useAnimation } from "framer-motion";
 import MatchController from "../controllers/MatchController";
 import { PaginationContext } from "../contexts/PaginationContext";
 import { ANIMATIONS } from "../tools/constants";
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, useMediaQuery, useTheme } from "@mui/material";
 import useGestures from "../hooks/useGestures";
+import MatchCard from "../components/MatchCard";
 
 const LEFT_HIDDEN = "-200%";
 const RIGHT_HIDDEN = "200%";
@@ -13,22 +14,21 @@ const DEGREES = 45;
 
 const animLR = {
   hiddenL: {
-    left: LEFT_HIDDEN,
-    transform: `rotate(-${DEGREES}deg)`,
+    x: LEFT_HIDDEN,
+    rotate: -DEGREES,
     opacity: 0,
     transition: { duration: ANIMATIONS.swipeDuration },
   },
   visible: {
-    left: 0,
-    transform: "rotate(0deg)",
+    x: 0,
+    rotate: 0,
     opacity: 1,
     transition: { duration: ANIMATIONS.swipeDuration },
   },
   hiddenR: {
-    left: RIGHT_HIDDEN,
-    transform: `rotate(${DEGREES}deg)`,
+    x: RIGHT_HIDDEN,
+    rotate: DEGREES,
     opacity: 0,
-
     transition: { duration: ANIMATIONS.swipeDuration },
   },
 };
@@ -70,30 +70,52 @@ export default function SonarView() {
         height: "100vh",
         p: 3,
         overflowX: "hidden",
+        overflowY: "hidden",
       }}
     >
       {matches && (
         <Grid item md={smallerScreen ? 2 : 3}>
-          <div style={{ height: "100%" }} onClick={directionalNav("left")}>
+          <Box
+            style={{ height: "100%", zIndex: 0 }}
+            onClick={directionalNav("left")}
+          >
             <DirectionNav direction="left" />
-          </div>
+          </Box>
         </Grid>
       )}
-      <Grid item md={smallerScreen ? 8 : 6}>
-        <motion.div
-          style={{ position: "relative", zIndex: 5 }}
+      <Grid
+        sx={{ zIndex: 10, gridColumn: "span 1" }}
+        item
+        md={smallerScreen ? 8 : 6}
+      >
+        <Box
+          component={motion.div}
+          sx={{
+            zIndex: 5,
+            maxHeight: "1000px",
+          }}
           variants={animLR}
           initial="visible"
           animate={controls}
         >
           <MatchController />
-        </motion.div>
+        </Box>
       </Grid>
       {matches && (
-        <Grid item md={smallerScreen ? 2 : 3}>
-          <div style={{ height: "100%" }} onClick={directionalNav("right")}>
+        <Grid
+          sx={{
+            alignSelf: "center",
+            justifySelf: "center",
+          }}
+          item
+          md={smallerScreen ? 2 : 3}
+        >
+          <Box
+            sx={{ height: "100%", zIndex: 0 }}
+            onClick={directionalNav("right")}
+          >
             <DirectionNav direction="right" />
-          </div>
+          </Box>
         </Grid>
       )}
     </Grid>

@@ -4,6 +4,7 @@ import {
   CardContent,
   CardMedia,
   Chip,
+  Paper,
   Slider,
   Stack,
   Toolbar,
@@ -12,7 +13,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/MatchCard.module.css";
 
 const LOREM =
@@ -32,12 +33,12 @@ const interestAnim = {
 };
 
 export default function MatchCard({
-  img,
-  title,
-  bio,
-  dataInterest,
-  sendInterest,
-  matchInterests,
+  img = "",
+  title = "",
+  bio = "",
+  dataInterest = 0,
+  sendInterest = () => {},
+  matchInterests = [],
 }) {
   const [interest, setInterest] = useState(dataInterest);
   const interestRef = useRef(interest);
@@ -67,9 +68,10 @@ export default function MatchCard({
   }, []);
 
   return (
-    <>
+    <Paper sx={{ zIndex: "50" }} elevation={10}>
       <Card
         sx={{
+          zIndex: 6,
           m: "auto",
           filter: `brightness(${0.9 + interest / 50})`,
         }}
@@ -77,8 +79,8 @@ export default function MatchCard({
         component={motion.div}
         animate={{
           padding: smallestScreen
-            ? 5
-            : `${(11 - interest) * 7 + 10 - (smallerScreen ? 30 : 0)}px`,
+            ? 2
+            : `${(11 - interest) * 4 + 10 - (smallerScreen ? 30 : 0)}px`,
         }}
       >
         <div className={styles.cardAction}>
@@ -146,6 +148,7 @@ export default function MatchCard({
           </Toolbar>
         </CardActions>
       </Card>{" "}
-    </>
+    </Paper>
   );
 }
+
