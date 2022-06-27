@@ -9,8 +9,6 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
-  console.log("hety");
-
   try {
     const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
     if (!session)

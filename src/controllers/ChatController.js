@@ -8,7 +8,7 @@ const history = [
   { sender: "Boom", text: "Hey how you doing?", sent: false },
 ];
 
-export default function ChatController() {
+export default function ChatController({ bar }) {
   const [session, loadSession, errSession] = useSession();
   const [peer] = usePeer(session);
 
@@ -20,7 +20,11 @@ export default function ChatController() {
       const response = await fetch("/api/chat", { method: "GET" });
       const data = await response.json();
       const conn = peer.connect(data.id, { metadata: session.name });
+      console.log(conn, "is the connection");
+
+      // const conn = peer.connect(data.id, { metadata: session.name });
       conn.on("open", () => {
+        console.log("connection opened");
         conn.send(text);
       });
       conn.on("error", (err) => {
@@ -31,46 +35,15 @@ export default function ChatController() {
     }
   }
 
-  // useEffect(() => {
-  //   if (!session) return;
-  //   import("peerjs").then(async (x) => {
-  //     const peer = new x.Peer(session.peerId);
-  //     const conn = peer.connect(session.chats[0].peer);
-
-  //     conn.on("error", (err) => {
-  //       console.log(err);
-  //     });
-
-  //     conn.on("open", () => {
-  //       console.log("yeah");
-  //       setConnection(conn);
-  //     });
-  //     // peer.on("connection", (conn) => {
-  //     //   conn.on("data", (data) => {
-  //     //     console.log(data);
-  //     //   });
-  //     // });
-  //   });
-  // }, [session]);
-
-  // const conn = peer.connect("97223302-7d7d-4528-b6ad-5329f3e28836");
-  // conn.on("open", () => {
-  //   conn.send("hi");
-  // });
-
-  // peer.on("connection", (conn) => {
-  //   conn.on("data", (data) => {
-  //     console.log(data);
-  //   });
-  //   conn.on("open", () => {
-  //     conn.send("hello");
-  //   });
-  // });
-
   return (
     <>
       {session && (
-        <ChatView session={session} sendText={sendMsg} peer={peer}></ChatView>
+        <ChatView
+          session={session}
+          sendText={sendMsg}
+          peer={peer}
+          bar={bar}
+        ></ChatView>
       )}
     </>
   );

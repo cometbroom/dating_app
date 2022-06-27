@@ -1,8 +1,16 @@
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  Box,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Message from "../components/Message";
 import { TextInput } from "../components/TextInput";
-import { Random, shuffle } from "../tools/random";
+import { shuffle } from "../tools/random";
 
 const COLORS = [
   // "#9400D3",
@@ -14,26 +22,33 @@ const COLORS = [
   "#FF0000",
 ];
 
-const getRand = () => Math.floor(Math.random() * COLORS.length);
+const history = [];
 
-export default function ChatView({ peer, sendText, session }) {
-  const [history, setHistory] = useState([]);
+function reducer(state, action) {
+  state.push(action);
+  console.log(state);
+  return [...state];
+}
 
-  const getHistory = (obj) => [...history, obj];
+export default function ChatView({ peer, sendText, session, bar }) {
+  const theme = useTheme();
+  const biggerScreens = useMediaQuery(theme.breakpoints.up("md"));
+
+  const [state, dispatch] = useReducer(reducer, []);
 
   const connectionHandler = (conn) => {
     conn.on("data", (data) => {
-      console.log(history);
-      setHistory([
-        ...history,
-        { sender: conn.metadata, text: data, sent: false },
-      ]);
+      console.log(data);
+      dispatch({
+        sender: conn.metadata,
+        text: data,
+        sent: false,
+      });
     });
   };
 
   useEffect(() => {
     if (!peer) return;
-    console.log("peer changed");
     peer.on("connection", connectionHandler);
     return () => {
       peer.off("connection");
@@ -41,11 +56,16 @@ export default function ChatView({ peer, sendText, session }) {
   }, [peer]);
 
   const sendHandler = (value) => {
-    setHistory([
-      ...history,
-      { sender: session ? session.name : "No name", text: value, sent: true },
-    ]);
+    dispatch({
+      sender: session ? session.name : "No name",
+      text: value,
+      sent: true,
+    });
     sendText(value);
+    // setText([
+    //   ...historyRef.current,
+    //   { sender: session ? session.name : "No name", text: value, sent: true },
+    // ]);
   };
 
   // shuffle(COLORS);
@@ -56,25 +76,29 @@ export default function ChatView({ peer, sendText, session }) {
         item
         sx={{
           display: "flex",
-          minHeight: "700px",
           flexDirection: "column",
           gap: "20px",
-          overflowY: "scroll",
         }}
       >
-        {history.map((msg, idx) => (
-          <Message
-            key={idx}
-            sender={msg.sender}
-            msg={msg.text}
-            color={msg.sent ? COLORS[0] : COLORS[1]}
-            sent={msg.sent}
-          />
-        ))}
+        {state &&
+          state.map((msg, idx) => (
+            <Message
+              key={idx}
+              sender={msg.sender}
+              msg={msg.text}
+              color={msg.sent ? COLORS[0] : COLORS[1]}
+              sent={msg.sent}
+            />
+          ))}
       </Grid>
       <Grid
         item
-        // sx={{ position: "fixed", bottom: "10px", right: 0, left: "240px" }}
+        sx={{
+          position: "fixed",
+          bottom: "10px",
+          right: 0,
+          left: bar ? (biggerScreens ? "240px" : "80px") : 0,
+        }}
       >
         <TextInput sendText={sendHandler} />
       </Grid>

@@ -1,14 +1,29 @@
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button, Divider, TextField } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export const TextInput = ({ sendText }) => {
   const textValue = useRef();
 
   const clickHandler = () => {
-    const value = textValue.current.querySelector("input").value || "";
+    const inputEl = textValue.current.querySelector("input");
+    const value = inputEl.value || "";
+    inputEl.value = "";
     sendText(value);
   };
+
+  const enterHandler = (e) => {
+    if (e.key === "Enter") {
+      clickHandler();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keyup", enterHandler);
+    return () => {
+      window.removeEventListener("keyup", enterHandler);
+    };
+  }, []);
 
   return (
     <>

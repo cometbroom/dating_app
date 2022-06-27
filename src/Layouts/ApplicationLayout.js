@@ -43,8 +43,12 @@ const barsAnim = {
 
 export default function ApplicationLayout(props) {
   const theme = useTheme();
-  const [barClosed, setBarClosed] = useToggle(true);
+  const [barOpened, setBarOpened] = useToggle(true);
   const [session, loading, error] = useSession();
+
+  React.useEffect(() => {
+    props.toggleBar && props.toggleBar(barOpened);
+  }, [barOpened]);
 
   const biggerScreens = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -66,7 +70,7 @@ export default function ApplicationLayout(props) {
           component={motion.div}
           variants={barsAnim}
           animate={{
-            width: barClosed ? `calc(100% - ${drawerWidth}px)` : "100%",
+            width: barOpened ? `calc(100% - ${drawerWidth}px)` : "100%",
             transition: { duration: BAR_DURATION },
           }}
           exit="close"
@@ -79,7 +83,7 @@ export default function ApplicationLayout(props) {
                 flexDirection: "row",
                 alignItems: "center",
               }}
-              onClick={setBarClosed}
+              onClick={setBarOpened}
             >
               <LogoIcon />
             </div>
@@ -87,7 +91,7 @@ export default function ApplicationLayout(props) {
         </AppBar>
       </AnimatePresence>
       <AnimatePresence>
-        {barClosed && (
+        {barOpened && (
           <motion.div
             style={{ zIndex: 100 }}
             variants={barsAnim}
@@ -171,8 +175,8 @@ export default function ApplicationLayout(props) {
           height: "100%",
         }}
         animate={{
-          width: barClosed ? `calc(100% - ${drawerWidth}px)` : "100%",
-          marginLeft: `${barClosed ? drawerWidth : 0}px`,
+          width: barOpened ? `calc(100% - ${drawerWidth}px)` : "100%",
+          marginLeft: `${barOpened ? drawerWidth : 0}px`,
           transition: { duration: BAR_DURATION },
         }}
       >
