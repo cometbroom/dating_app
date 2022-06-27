@@ -6,6 +6,24 @@ import { unstable_getServerSession } from "next-auth/next";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]";
 const handler = nextConnect();
 
+const GET_CHATS_AGG = (array) => [
+  {
+    $match: {
+      _id: {
+        $in: array.map((x) => new ObjectId(x.id)),
+      },
+    },
+  },
+  {
+    $project: {
+      _id: 0,
+      name: "$name",
+      img: "$profileImg",
+      peer: "$peerId",
+    },
+  },
+];
+
 handler.use(middleware);
 
 handler.get(async (req, res) => {
@@ -14,13 +32,12 @@ handler.get(async (req, res) => {
     if (!session)
       return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
     const coll = req.db.collection("users");
-    const foundUser = await coll.findOne({
-      _id: new ObjectId(session.user.id),
-    });
-    if (!foundUser)
-      return HttpResponder.NOT_FOUND(res, { msg: "User not found" });
-    const peerId = await coll.findOne({ _id: foundUser.chats[0] });
-    return HttpResponder.OK(res, { id: peerId.peerId });
+    const peerId = await coll
+      .aggregate(GET_CHATS_AGG(session.user.chats))
+      .toArray();
+    console.log("fetched", peerId);
+
+    return HttpResponder.OK(res, peerId);
   } catch (error) {
     HttpResponder.BAD_REQ(res, { msg: error.message });
   }

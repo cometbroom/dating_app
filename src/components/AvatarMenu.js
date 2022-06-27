@@ -22,7 +22,7 @@ export default function AvatarMenu({ biggerScreens, img, title }) {
         }}
       >
         <span onClick={handleClick}>
-          <BadgedAvatar src={img} alt={`${title}'s avatar photo`} />
+          <BadgedAvatar dot="dot" src={img} alt={`${title}'s avatar photo`} />
         </span>
         {biggerScreens && (
           <>

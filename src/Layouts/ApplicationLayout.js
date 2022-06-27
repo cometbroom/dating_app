@@ -134,7 +134,9 @@ export default function ApplicationLayout(props) {
                   {LIST_ITEMS.map((item, index) => (
                     <ListItem key={index} disablePadding>
                       <ListItemButton
-                        href={item.link}
+                        onClick={() => {
+                          props.setTab(index);
+                        }}
                         // disabled={index === 0 ? false : true}
                       >
                         <motion.div

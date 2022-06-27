@@ -9,6 +9,19 @@ const handler = nextConnect();
 
 handler.use(middleware);
 
+handler.get(async (req, res) => {
+  try {
+    const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
+    if (!session)
+      return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
+    const coll = req.db.collection("users");
+    const peerId = await coll.findOne({ _id: new ObjectId(req.query.id) });
+    return HttpResponder.OK(res, { id: peerId.peerId });
+  } catch (error) {
+    HttpResponder.BAD_REQ(res, { msg: error.message });
+  }
+});
+
 handler.post(async (req, res) => {
   try {
     const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
