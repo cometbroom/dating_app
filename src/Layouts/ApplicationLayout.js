@@ -4,7 +4,6 @@ import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -12,7 +11,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { COLORS } from "../tools/constants";
 import LogoIcon from "../components/LogoIcon";
-import BadgedAvatar from "../components/BadgedAvatar";
 import RadarIcon from "@mui/icons-material/Radar";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -25,7 +23,6 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import useToggle from "../../src/hooks/useToggle";
 import AvatarMenu from "../components/AvatarMenu";
-import { getSession } from "next-auth/react";
 import useSession from "../hooks/useSession";
 
 const LIST_ITEMS = [

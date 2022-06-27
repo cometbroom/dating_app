@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import ReactPlayer from "react-player";
+import CallCard from "../components/CallCard";
 
 import { NAVIGATORS } from "../tools/compatibility";
 
@@ -37,6 +38,7 @@ export default function AudioProvider({ peer, ...props }) {
   return (
     <AudioContext.Provider value={[stream, setStream]}>
       <>
+        <CallCard />
         {props.children}
         {stream && (
           <ReactPlayer
