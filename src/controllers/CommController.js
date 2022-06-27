@@ -1,36 +1,50 @@
 import Error from "next/error";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import useContacts from "../hooks/useContacts";
 import CommView from "../views/CommView";
 import { AudioContext } from "../contexts/AudioContext";
 import { NAVIGATORS } from "../tools/compatibility";
+import CallCard from "../components/CallCard";
+import { CALL_STATES } from "../tools/constants";
 
 export default function CommController({ peer, session }) {
   const [data, loading, error] = useContacts();
   const [context, setContext] = useContext(AudioContext);
+  const [callFunction, setCallFunction] = useState();
+  const [callState, setCallState] = useState(CALL_STATES.OUTGOING);
+  const [errorCall, setErrorCall] = useState("");
 
   function callPeer(idx) {
-    if (!data || !navigator || context) return;
+    if (!data || !navigator || context || !peer) return;
     navigator.getUserMedia = NAVIGATORS(navigator);
 
     navigator.getUserMedia(
       { video: false, audio: true },
-      // Success callback
       function success(localAudioStream) {
-        const outgoing = peer.call(data[idx].peer, localAudioStream);
-        console.log(data[idx].peer);
-
-        outgoing.on("stream", function (stream) {
-          console.log("stream went", stream);
-          setContext(stream);
-          // Do something with this audio stream
+        const ongoing = peer.call(data[idx].peer, localAudioStream, {
+          metadata: { name: session.name },
         });
-        // Do something with audio stream
+
+        ongoing.on("stream", function (stream) {
+          setCallState(CALL_STATES.ONCALL);
+          setContext(stream);
+        });
+        peer.on("error", () => {
+          setErrorCall("Could not reach your target.");
+          setTimeout(() => {
+            setCallFunction();
+            setErrorCall("");
+            console.log(peer);
+          }, 6000);
+        });
+        setCallFunction({
+          reject: () => {
+            if (ongoing) ongoing.close();
+            setCallFunction();
+          },
+        });
       },
-      // Failure callback
-      function error(err) {
-        // handle error
-      }
+      function error(err) {}
     );
   }
 
@@ -52,5 +66,16 @@ export default function CommController({ peer, session }) {
 
   if (error) return <Error />;
 
-  return <>{session && data && <CommView contacts={data} call={callPeer} />}</>;
+  return (
+    <>
+      {callFunction && (
+        <CallCard
+          callFunction={callFunction}
+          initialState={callState}
+          errorMessage={errorCall}
+        />
+      )}
+      {session && data && <CommView contacts={data} call={callPeer} />}
+    </>
+  );
 }

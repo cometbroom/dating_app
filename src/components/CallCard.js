@@ -12,18 +12,20 @@ import CallEndIcon from "@mui/icons-material/CallEnd";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useReducer, useState } from "react";
 import { FORMAT_TIME } from "../tools/time";
+import { CALL_STATES } from "../tools/constants";
 
 function reducer(state, action) {
   return state + action;
 }
 
-const CALLING = 0;
-const GETCALLED = 1;
-const ONCALL = 2;
-
-export default function CallCard() {
+export default function CallCard({
+  callFunction,
+  initialState = CALL_STATES.INCOMING,
+  caller,
+  errorMessage = "",
+}) {
   const call = true;
-  const state = ONCALL;
+  const [state, setState] = useState(initialState);
 
   const [counter, dispatch] = useReducer(reducer, 0);
 
@@ -51,7 +53,7 @@ export default function CallCard() {
           zIndex: 10,
         }}
         animate={
-          state !== GETCALLED
+          state !== CALL_STATES.INCOMING
             ? {}
             : {
                 rotate: [0, -3, 0, 3, 0],
@@ -79,20 +81,25 @@ export default function CallCard() {
         >
           <Stack spacing={3}>
             <Typography sx={{ textAlign: "center" }} variant="h6">
-              {state === CALLING
+              {state === CALL_STATES.OUTGOING
                 ? "Outgoing call..."
-                : state === ONCALL
+                : state === CALL_STATES.ONCALL
                 ? "Ongoing call..."
                 : "Incoming call from..."}
             </Typography>
+            {errorMessage && (
+              <Typography sx={{ textAlign: "center" }} variant="h5" color="red">
+                {errorMessage}
+              </Typography>
+            )}
             <Typography
               sx={{ textAlign: "center" }}
               variant="h4"
               color="primary"
             >
-              Ali
+              {caller}
             </Typography>
-            {state === ONCALL && (
+            {state === CALL_STATES.ONCALL && (
               <Typography sx={{ textAlign: "center" }}>
                 {FORMAT_TIME(counter)}
               </Typography>
@@ -102,14 +109,26 @@ export default function CallCard() {
             sx={{
               display: "flex",
               width: "100%",
-              justifyContent: state !== GETCALLED ? "center" : "space-between",
+              justifyContent:
+                state !== CALL_STATES.INCOMING ? "center" : "space-between",
             }}
           >
-            <Button variant="contained" color="error">
+            <Button
+              variant="contained"
+              color="error"
+              onClick={callFunction.reject}
+            >
               <CallEndIcon sx={{ color: "white" }} />
             </Button>
-            {state === GETCALLED && (
-              <Button variant="contained" color="success">
+            {state === CALL_STATES.INCOMING && (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => {
+                  setState(CALL_STATES.ONCALL);
+                  callFunction.accept();
+                }}
+              >
                 <CallIcon sx={{ color: "white" }} />
               </Button>
             )}

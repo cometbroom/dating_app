@@ -29,7 +29,6 @@ export default function usePeer(session) {
           setPeerId(id);
         });
 
-
         // peer.on("connection", (conn) => {
         //   conn.on("data", (data) => {
         //     console.log(data);
@@ -48,7 +47,6 @@ export default function usePeer(session) {
 
         peer.on("error", (error) => {
           console.log("peer error", error);
-          cleanUp();
         });
       })
       .catch((error) => {

@@ -44,4 +44,10 @@ export const PEER_IDS = {
   id2: "b2d6f0b2-bdf5-4886-9332-5067c8458ad6",
 };
 
+export const CALL_STATES = {
+  OUTGOING: 0,
+  INCOMING: 1,
+  ONCALL: 2,
+};
+
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

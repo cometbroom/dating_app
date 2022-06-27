@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import CallIcon from "@mui/icons-material/Call";
 import BadgedAvatar from "../components/BadgedAvatar";
+import { motion } from "framer-motion";
 
 export default function CommView({ contacts, call }) {
   return (
@@ -26,9 +27,17 @@ export default function CommView({ contacts, call }) {
                 />
               </ListItemAvatar>
               <ListItemText primary={x.name} />
-              <div onClick={() => call(idx)}>
-                <CallIcon />
-              </div>
+              <motion.div
+                whileHover={{
+                  rotate: [0, -5, 0, 5, 0],
+                  scale: 1.2,
+                  transition: { repeat: Infinity, repeatDelay: 2 },
+                }}
+                whileTap={{ rotate: -25 }}
+                onClick={() => call(idx)}
+              >
+                <CallIcon sx={{ cursor: "pointer" }} />
+              </motion.div>
             </ListItem>
             <Divider variant="inset" component="li" />
           </div>
