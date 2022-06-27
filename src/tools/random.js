@@ -21,7 +21,7 @@ export const Random = function (min, max) {
 
 //Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 //Shuffles an array efficiently
-function shuffle(array) {
+export function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
 

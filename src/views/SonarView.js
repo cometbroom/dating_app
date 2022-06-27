@@ -33,7 +33,7 @@ const animLR = {
   },
 };
 
-export default function MatchView() {
+export default function SonarView() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const smallerScreen = useMediaQuery(theme.breakpoints.down("lg"));

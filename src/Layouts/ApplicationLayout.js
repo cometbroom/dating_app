@@ -4,7 +4,6 @@ import Drawer from "@mui/material/Drawer";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -12,7 +11,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { COLORS } from "../tools/constants";
 import LogoIcon from "../components/LogoIcon";
-import BadgedAvatar from "../components/BadgedAvatar";
 import RadarIcon from "@mui/icons-material/Radar";
 import AssistantOutlinedIcon from "@mui/icons-material/AssistantOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -25,7 +23,6 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import useToggle from "../../src/hooks/useToggle";
 import AvatarMenu from "../components/AvatarMenu";
-import { getSession } from "next-auth/react";
 import useSession from "../hooks/useSession";
 
 const LIST_ITEMS = [
@@ -43,15 +40,24 @@ const barsAnim = {
 
 export default function ApplicationLayout(props) {
   const theme = useTheme();
-  const [barClosed, setBarClosed] = useToggle(true);
+  const [barOpened, setBarOpened] = useToggle(true);
   const [session, loading, error] = useSession();
+
+  React.useEffect(() => {
+    props.toggleBar && props.toggleBar(barOpened);
+  }, [barOpened]);
 
   const biggerScreens = useMediaQuery(theme.breakpoints.up("md"));
 
   const drawerWidth = biggerScreens ? 240 : 80;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+      }}
+    >
       <AnimatePresence>
         <AppBar
           position="fixed"
@@ -61,7 +67,7 @@ export default function ApplicationLayout(props) {
           component={motion.div}
           variants={barsAnim}
           animate={{
-            width: barClosed ? `calc(100% - ${drawerWidth}px)` : "100%",
+            width: barOpened ? `calc(100% - ${drawerWidth}px)` : "100%",
             transition: { duration: BAR_DURATION },
           }}
           exit="close"
@@ -74,7 +80,7 @@ export default function ApplicationLayout(props) {
                 flexDirection: "row",
                 alignItems: "center",
               }}
-              onClick={setBarClosed}
+              onClick={setBarOpened}
             >
               <LogoIcon />
             </div>
@@ -82,7 +88,7 @@ export default function ApplicationLayout(props) {
         </AppBar>
       </AnimatePresence>
       <AnimatePresence>
-        {barClosed && (
+        {barOpened && (
           <motion.div
             style={{ zIndex: 100 }}
             variants={barsAnim}
@@ -125,8 +131,10 @@ export default function ApplicationLayout(props) {
                   {LIST_ITEMS.map((item, index) => (
                     <ListItem key={index} disablePadding>
                       <ListItemButton
-                        href={item.link}
-                        disabled={index === 0 ? false : true}
+                        onClick={() => {
+                          props.setTab(index);
+                        }}
+                        // disabled={index === 0 ? false : true}
                       >
                         <motion.div
                           style={{
@@ -166,8 +174,8 @@ export default function ApplicationLayout(props) {
           height: "100%",
         }}
         animate={{
-          width: barClosed ? `calc(100% - ${drawerWidth}px)` : "100%",
-          marginLeft: `${barClosed ? drawerWidth : 0}px`,
+          width: barOpened ? `calc(100% - ${drawerWidth}px)` : "100%",
+          marginLeft: `${barOpened ? drawerWidth : 0}px`,
           transition: { duration: BAR_DURATION },
         }}
       >
