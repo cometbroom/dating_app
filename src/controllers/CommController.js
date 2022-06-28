@@ -29,14 +29,6 @@ export default function CommController({ peer, session }) {
           setCallState(CALL_STATES.ONCALL);
           setContext(stream);
         });
-        peer.on("error", () => {
-          setErrorCall("Could not reach your target.");
-          setTimeout(() => {
-            setCallFunction();
-            setErrorCall("");
-            console.log(peer);
-          }, 6000);
-        });
         setCallFunction({
           reject: () => {
             if (ongoing) ongoing.close();
@@ -49,6 +41,7 @@ export default function CommController({ peer, session }) {
   }
 
   useEffect(() => {
+    console.log(data);
     if (!peer || !data) return;
     data.map((x) => {
       const conn = peer.connect(x.peer, { metadata: session.name });

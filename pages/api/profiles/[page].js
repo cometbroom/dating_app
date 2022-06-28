@@ -24,7 +24,7 @@ const MATCH_INTEREST_AGGREGATION = (currentId, matchId) => [
   },
   {
     $match: {
-      "matches._id": new ObjectId(matchId),
+      "matches._id": matchId,
     },
   },
 ];
@@ -108,7 +108,9 @@ handler.get(async (req, res) => {
       .toArray();
 
     const interestTowardsNextMatch = await coll
-      .aggregate(MATCH_INTEREST_AGGREGATION(session.user.id, nextMatchDocument[0]._id))
+      .aggregate(
+        MATCH_INTEREST_AGGREGATION(session.user.id, nextMatchDocument[0]._id)
+      )
       .toArray();
 
     const nextMatchInterests = await collInts
@@ -116,9 +118,13 @@ handler.get(async (req, res) => {
       .toArray();
 
     return HttpResponder.OK(res, {
+      id: nextMatchDocument[0]._id,
       name: nextMatchDocument[0].name,
       img: nextMatchDocument[0].img,
-      interest: interestTowardsNextMatch.length > 0 ? interestTowardsNextMatch[0].interest : 0,
+      interest:
+        interestTowardsNextMatch.length > 0
+          ? interestTowardsNextMatch[0].matches.interest
+          : 0,
       interests: nextMatchInterests.map((m) => m.interest),
     });
   } catch (error) {

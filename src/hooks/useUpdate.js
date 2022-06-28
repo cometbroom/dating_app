@@ -5,7 +5,7 @@ const fetcher = (...args) =>
 
 export default function useUpdate(id) {
   const { data, error } = useSWR(`/api/chat/${id}`, fetcher, {
-    refreshInterval: 30000,
+    refreshInterval: 5000,
   });
 
   return;

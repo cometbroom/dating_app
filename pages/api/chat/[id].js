@@ -30,8 +30,7 @@ handler.post(async (req, res) => {
     const coll = req.db.collection("users");
     const ack = await coll.findOneAndUpdate(
       { _id: new ObjectId(session.user.id) },
-      { $set: { peerId: req.query.id } },
-      { upsert: true }
+      { $set: { peerId: req.query.id } }
     );
 
     return HttpResponder.OK(res, { msg: "succeeded" });

@@ -28,7 +28,7 @@ import useSession from "../hooks/useSession";
 const LIST_ITEMS = [
   { title: "SONAR", icon: <RadarIcon />, link: "/application/" },
   { title: "Chat", icon: <AssistantOutlinedIcon />, link: "application/chats" },
-  { title: "Settings", icon: <SettingsIcon />, link: "application/settings" },
+  // { title: "Settings", icon: <SettingsIcon />, link: "application/settings" },
 ];
 
 const BAR_DURATION = 0.5;

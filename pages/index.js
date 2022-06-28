@@ -1,12 +1,10 @@
-import LandingContent from "../src/components/LandingContent";
 import LandingLayout from "../src/Layouts/LandingLayout";
+import LandingView from "../src/views/LandingView";
 
 export default function Home() {
   return (
-    <>
-      <LandingLayout>
-        <LandingContent></LandingContent>
-      </LandingLayout>
-    </>
+    <LandingLayout>
+      <LandingView></LandingView>
+    </LandingLayout>
   );
 }

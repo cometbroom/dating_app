@@ -15,8 +15,6 @@ export default function usePeer(session) {
   };
 
   useEffect(() => {
-    console.log(session);
-
     if (!session) return;
     // const id = session.peerId;
     import("peerjs")
@@ -24,34 +22,21 @@ export default function usePeer(session) {
         const peer = peer ? peer : new x.Peer();
 
         peer.on("open", (id) => {
-          console.log("opened", id);
           setPeer(peer);
           setPeerId(id);
         });
 
-        // peer.on("connection", (conn) => {
-        //   conn.on("data", (data) => {
-        //     console.log(data);
-        //   });
-        // });
-
         peer.on("disconnected", () => {
-          console.log("Peer desconnected");
           cleanUp();
         });
 
         peer.on("close", () => {
-          console.log("Peer closed remotetly");
           cleanUp();
         });
 
-        peer.on("error", (error) => {
-          console.log("peer error", error);
-        });
+        peer.on("error", (error) => {});
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
 
     return () => {
       cleanUp();

@@ -1,21 +1,13 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import TabPanel from "../components/TabPanel";
 import LoginController from "../controllers/LoginController";
 import SignupController from "../controllers/SignupController";
 
+const GetImageBg = () => <img src="/deep_ocean.svg" />;
+
 export default function SignupView() {
   return (
-    <Grid bgcolor="seconday" container>
+    <Grid bgcolor="seconday" columnSpacing={3} container>
       <Grid
         item
         md={6}
@@ -33,7 +25,16 @@ export default function SignupView() {
           ]}
         />
       </Grid>
-      <Grid item md={6}></Grid>
+      <Grid item md={6} sx={{ display: { xs: "none", sm: "flex" } }}>
+        <Box
+          sx={{
+            width: "100%",
+            alignSelf: "center",
+          }}
+        >
+          <Paper component={GetImageBg}></Paper>
+        </Box>
+      </Grid>
     </Grid>
   );
 }
