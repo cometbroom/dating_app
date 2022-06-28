@@ -14,7 +14,6 @@ import { HttpResponder } from "../../../src/tools/HttpResponder";
 import { unstable_getServerSession } from "next-auth/next";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]";
 import { validateIntPoint } from "../../../src/backend/validation/pointSchema";
-import { v4 as uuidv4 } from "uuid";
 
 const CURRENT_MATCH = (id) => [
   {
@@ -57,13 +56,16 @@ handler.post(async (req, res) => {
     if (checkIfUserExists)
       return HttpResponder.CONFLICT(res, { msg: "User already exists." });
 
-    const interests = await getInterests(req);
-
+    const interests = await getInterests(
+      req.db.collection("interests"),
+      interests
+    );
     //Find matches according to interest
     const matches = await SONAR.matches(req.db, interests);
 
-    const passwordSH = saltHashPassword(req.body.password);
+    console.log(matches);
 
+    const passwordSH = saltHashPassword(req.body.password);
     //Insert user with interests and matches
     const ack = await usersColl.insertOne({
       name: req.body.name,
@@ -72,23 +74,37 @@ handler.post(async (req, res) => {
       matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
       profileImg: req.body.img || "",
       index: 0,
-      peerId: uuidv4(),
+      peerId: "",
       ...passwordSH,
     });
+
+    await usersColl.updateMany(
+      {
+        _id: { $in: matches.map((x) => x._id) },
+      },
+      {
+        $addToSet: {
+          matches: {
+            _id: new ObjectId(ack.insertedId),
+          },
+        },
+      }
+    );
+
     return HttpResponder.CREATED(res, ack.insertedId);
   } catch (error) {
     HttpResponder.NOT_FOUND(res, {
       msg: error.message,
+      ...error,
     });
   }
 });
 
-async function getInterests(req) {
+async function getInterests(collection, interests) {
   try {
-    const collInts = req.db.collection("interests");
     //find interest id's by name
-    const foundDocs = await collInts
-      .find({ interest: { $in: req.body.interests } })
+    const foundDocs = await collection
+      .find({ interest: { $in: interests } })
       .map((m) => m._id)
       .toArray();
     return foundDocs;

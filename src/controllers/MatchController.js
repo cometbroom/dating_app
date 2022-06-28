@@ -8,7 +8,9 @@ import ErrorProvider from "../tools/ErrorProvider";
 
 export default function MatchController() {
   const [page, setPage] = useContext(PaginationContext);
+  console.log(page);
   const [data, loading, error] = useFetch(`api/profiles/${page + 1}`);
+  console.log(data);
 
   function sendInterest(interest) {
     fetch("api/users", {

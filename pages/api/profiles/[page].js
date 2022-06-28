@@ -5,23 +5,26 @@ import { HttpResponder } from "../../../src/tools/HttpResponder";
 import { unstable_getServerSession } from "next-auth/next";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]";
 
-const NEXT_AGGREGATION = (id) => [
+const MATCH_INTEREST_AGGREGATION = (currentId, matchId) => [
   {
     $match: {
-      _id: new ObjectId(id),
-    },
-  },
-  {
-    $addFields: {
-      firstEl: {
-        $arrayElemAt: ["$matches", "$index"],
-      },
+      _id: new ObjectId(currentId),
     },
   },
   {
     $project: {
-      _id: "$firstEl._id",
-      interest: "$firstEl.interest",
+      _id: 0,
+      matches: "$matches",
+    },
+  },
+  {
+    $unwind: {
+      path: "$matches",
+    },
+  },
+  {
+    $match: {
+      "matches._id": new ObjectId(matchId),
     },
   },
 ];
@@ -34,10 +37,38 @@ const PROFILE_AGGREGATION = (id) => [
   },
   {
     $project: {
-      _id: 0,
       name: "$name",
       interests: "$interests",
       img: "$profileImg",
+    },
+  },
+];
+
+const MATCH_AGGREGATION = (interests, next) => [
+  {
+    $project: {
+      matchedCount: {
+        $size: {
+          $ifNull: [
+            {
+              $setIntersection: ["$interests", interests],
+            },
+            [],
+          ],
+        },
+      },
+    },
+  },
+  {
+    $sort: {
+      matchedCount: -1,
+      _id: -1,
+    },
+  },
+  {
+    $project: {
+      _id: "$_id",
+      matchCount: "$matchedCount",
     },
   },
 ];
@@ -59,29 +90,36 @@ handler.get(async (req, res) => {
     });
 
     const pagination = req.query.page - foundUser.index;
+    const finalIndex = foundUser.index + pagination <= 0 ? 0 : pagination;
 
     await coll.updateOne(
       { _id: new ObjectId(session.user.id) },
-      { $inc: { index: foundUser.index + pagination <= 0 ? 0 : pagination } }
+      { $inc: { index: finalIndex } }
     );
 
-    const foundDocs = await coll
-      .aggregate(NEXT_AGGREGATION(session.user.id))
-      .toArray();
-    const getUser = await coll
-      .aggregate(PROFILE_AGGREGATION(foundDocs[0]._id))
+    const nextMatch = await coll
+      .aggregate(MATCH_AGGREGATION(foundUser.interests))
+      .skip(foundUser.index + finalIndex)
+      .limit(1)
       .toArray();
 
-    const interestIds = getUser[0].interests.map((x) => new ObjectId(x));
-    const foundInterests = await collInts
-      .find({ _id: { $in: interestIds } })
+    const nextMatchDocument = await coll
+      .aggregate(PROFILE_AGGREGATION(nextMatch[0]._id))
+      .toArray();
+
+    const interestTowardsNextMatch = await coll
+      .aggregate(MATCH_INTEREST_AGGREGATION(session.user.id, nextMatchDocument[0]._id))
+      .toArray();
+
+    const nextMatchInterests = await collInts
+      .find({ _id: { $in: nextMatchDocument[0].interests } })
       .toArray();
 
     return HttpResponder.OK(res, {
-      name: getUser[0].name,
-      img: getUser[0].img,
-      interest: foundDocs[0].interest,
-      interests: foundInterests.map((m) => m.interest),
+      name: nextMatchDocument[0].name,
+      img: nextMatchDocument[0].img,
+      interest: interestTowardsNextMatch.length > 0 ? interestTowardsNextMatch[0].interest : 0,
+      interests: nextMatchInterests.map((m) => m.interest),
     });
   } catch (error) {
     console.log(error.message);

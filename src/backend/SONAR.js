@@ -1,9 +1,35 @@
-const matchesAggregation = (interests) => [
+import { ObjectId } from "mongodb";
+
+const b = [
   {
     $set: {
       matchedCount: {
         $size: {
-          $setIntersection: ["$interests", interests],
+          $setIntersection: [
+            "$interests",
+            [
+              new ObjectId("62b0d473a4ca317b9b2c20ea"),
+              new ObjectId("62b0d473a4ca317b9b2c20bd"),
+            ],
+          ],
+        },
+      },
+    },
+  },
+  {
+    $sort: {
+      index: -1,
+    },
+  },
+];
+
+const matchesAggregation = (interests) => [
+  //          $setIntersection: ["$interests", interests],
+  {
+    $set: {
+      matchedCount: {
+        $size: {
+          $setIntersection: [["$interests", ...interests]],
         },
       },
     },
@@ -16,6 +42,7 @@ const matchesAggregation = (interests) => [
   {
     $project: {
       _id: "$_id",
+      matchCount: "$matchedCount",
     },
   },
 ];
