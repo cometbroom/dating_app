@@ -1,57 +1,30 @@
-import * as React from "react";
-import PropTypes from "prop-types";
 import {
   AppBar,
   Box,
-  Divider,
   Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Toolbar,
-  Button,
   Container,
+  Stack,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoIcon from "../components/LogoIcon";
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import Link from "next/link";
+import DrawerSide from "../components/Drawer";
 
 const drawerWidth = 240;
 const navItems = ["Home", "Testimonials"];
 
 export default function LandingLayout(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Box sx={{ display: "inline-flex", alignItems: "center" }}>
-        <LogoIcon></LogoIcon>
-      </Box>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton
-              href={`/${item.toLowerCase()}`}
-              sx={{ textAlign: "center" }}
-            >
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
   return (
     <AnimatePresence>
       <Container
@@ -84,26 +57,36 @@ export default function LandingLayout(props) {
               >
                 <LogoIcon></LogoIcon>
               </Toolbar>
-              <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <Stack
+                sx={{
+                  display: {
+                    xs: "none",
+                    sm: "flex",
+                    flexDirection: "row",
+                    gap: "25px",
+                  },
+                }}
+              >
                 {navItems.map((item) => (
-                  <Button
-                    href={`/${item.toLowerCase()}`}
-                    key={item}
-                    sx={{ color: "#fff" }}
-                  >
-                    {item}
-                  </Button>
+                  <Link key={item} href={`/${item.toLowerCase()}`}>
+                    <Box
+                      component={motion.div}
+                      whileHover={{ scale: 1.1, y: -5 }}
+                      whileTap={{ scale: 1, y: 5 }}
+                      sx={{ color: "#fff", cursor: "pointer" }}
+                    >
+                      {item}
+                    </Box>
+                  </Link>
                 ))}
-              </Box>
+              </Stack>
             </Toolbar>
           </AppBar>
           <Box component="nav">
             <Drawer
-              container={container}
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
-              // Not sure about the reason for this one
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
               }}
@@ -115,7 +98,10 @@ export default function LandingLayout(props) {
                 },
               }}
             >
-              {drawer}
+              <DrawerSide
+                drawerToggle={handleDrawerToggle}
+                navItems={navItems}
+              />
             </Drawer>
           </Box>
           <Box component="main" sx={{ p: 3, width: "100%" }}>
@@ -127,11 +113,3 @@ export default function LandingLayout(props) {
     </AnimatePresence>
   );
 }
-
-LandingLayout.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};

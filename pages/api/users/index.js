@@ -1,18 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import "dotenv/config";
-import { ObjectId } from "mongodb";
-
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
 import { validate } from "../../../src/backend/validation/userSchema";
-import saltHashPassword, {
-  getHash,
-} from "../../../src/backend/authentication/crypto";
+import saltHashPassword from "../../../src/backend/authentication/crypto";
 import { HttpResponder } from "../../../src/tools/HttpResponder";
-import { unstable_getServerSession } from "next-auth/next";
-import { AUTH_OPTIONS } from "../auth/[...nextauth]";
-import { validateIntPoint } from "../../../src/backend/validation/pointSchema";
 
 const handler = nextConnect();
 

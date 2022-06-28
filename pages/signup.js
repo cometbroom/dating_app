@@ -3,10 +3,8 @@ import SignupView from "../src/views/SignupView";
 
 export default function Signup() {
   return (
-    <>
-      <LandingLayout>
-        <SignupView></SignupView>
-      </LandingLayout>
-    </>
+    <LandingLayout>
+      <SignupView></SignupView>
+    </LandingLayout>
   );
 }

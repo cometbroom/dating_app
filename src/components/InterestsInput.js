@@ -1,15 +1,5 @@
-import {
-  Autocomplete,
-  Divider,
-  Icon,
-  IconButton,
-  InputBase,
-  Paper,
-  TextField,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import DirectionsIcon from "@mui/icons-material/Directions";
-import { useEffect, useRef, useState } from "react";
+import { Autocomplete, Paper, TextField } from "@mui/material";
+import { useRef } from "react";
 import useFetch from "../hooks/useFetch";
 import ErrorProvider from "../tools/ErrorProvider";
 import InterestsIcon from "@mui/icons-material/Interests";
@@ -22,11 +12,8 @@ export default function InterestsInput({ placeholder, values, setValues }) {
   const isEnoughValues = values.length > 0 && values.length < 3;
 
   function selectHandler(e, option, reason) {
-    const value = autofill.current.innerText.split("\n");
-
-    value.splice(0, 1);
-    value.splice(-1, 1);
-    setValues(value);
+    const labels = autofill.current.querySelectorAll("span.MuiChip-label");
+    setValues(Array.from(labels).map((x) => x.textContent.toUpperCase()));
   }
 
   function enterHandler(e) {
