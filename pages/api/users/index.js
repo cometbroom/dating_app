@@ -58,12 +58,10 @@ handler.post(async (req, res) => {
 
     const interests = await getInterests(
       req.db.collection("interests"),
-      interests
+      req.body.interests
     );
     //Find matches according to interest
     const matches = await SONAR.matches(req.db, interests);
-
-    console.log(matches);
 
     const passwordSH = saltHashPassword(req.body.password);
     //Insert user with interests and matches
@@ -71,7 +69,7 @@ handler.post(async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       interests,
-      matches: matches.map((match) => ({ _id: match._id, interest: 0 })),
+      matches: [],
       profileImg: req.body.img || "",
       index: 0,
       peerId: "",
@@ -129,6 +127,8 @@ handler.put(async (req, res) => {
       _id: new ObjectId(session.user.id),
     });
 
+    updateInterestOutgoing(coll);
+
     const ack = await coll.updateOne(
       { _id: new ObjectId(session.user.id) },
       {
@@ -140,6 +140,19 @@ handler.put(async (req, res) => {
     return HttpResponder.BAD_REQ(res, { msg: error.message });
   }
 });
+
+async function updateInterestOutgoing(collection) {
+  const ack = await coll.updateOne({
+    _id: session.user.id,
+    matches: {
+      $not: {
+        $elemMatch: {
+          _id: ObjectId("62b0db55890b300834b9b47a"),
+        },
+      },
+    },
+  });
+}
 
 //To populate db again stay away from
 const rand = (max) => Math.floor(Math.random() * max);
