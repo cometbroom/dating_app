@@ -50,7 +50,7 @@ export default function CallCard({
           position: "absolute",
           left: "50%",
           top: "50%",
-          zIndex: 10,
+          zIndex: 100,
         }}
         animate={
           state !== CALL_STATES.INCOMING

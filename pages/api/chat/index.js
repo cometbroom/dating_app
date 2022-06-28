@@ -3,13 +3,14 @@ import middleware from "../../../middleware/database";
 import { HttpResponder } from "../../../src/tools/HttpResponder";
 import { unstable_getServerSession } from "next-auth/next";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]";
+import { ObjectId } from "mongodb";
 const handler = nextConnect();
 
 const GET_CHATS_AGG = (array) => [
   {
     $match: {
       _id: {
-        $in: array,
+        $in: array.map((x) => new ObjectId(x)),
       },
     },
   },
@@ -30,6 +31,7 @@ handler.get(async (req, res) => {
     const session = await unstable_getServerSession(req, res, AUTH_OPTIONS);
     if (!session)
       return HttpResponder.UNAUTHORIZED(res, { msg: "Unauthorized" });
+
     const coll = req.db.collection("users");
     const peerId = await coll
       .aggregate(GET_CHATS_AGG(session.user.chats))

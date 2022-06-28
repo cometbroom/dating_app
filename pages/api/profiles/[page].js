@@ -113,8 +113,6 @@ handler.get(async (req, res) => {
       )
       .toArray();
 
-    console.log(interestTowardsNextMatch);
-
     const nextMatchInterests = await collInts
       .find({ _id: { $in: nextMatchDocument[0].interests } })
       .toArray();
