@@ -133,7 +133,7 @@ export default function MatchCard({
               justifyContent: "space-between",
             }}
           >
-            <Typography>Interest:</Typography>
+            <Typography>Points:</Typography>
             <Slider
               aria-label="Interest Slider"
               defaultValue={dataInterest}
@@ -151,4 +151,3 @@ export default function MatchCard({
     </Paper>
   );
 }
-
