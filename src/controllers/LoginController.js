@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { VALIDATION } from "../tools/constants";
 import { signIn } from "next-auth/react";
+import useKeyEvents from "../hooks/useKeyEvents";
 
 export default function LoginController() {
   const [email, setEmail] = useState("");
@@ -36,17 +37,9 @@ export default function LoginController() {
       email,
       password,
     });
-    console.log(status);
-    // const response = await fetch("api/users", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ email, password, interests }),
-    // });
-    // const data = await response.json();
-    // console.log(data);
   }
+
+  useKeyEvents("Enter", submitForm);
 
   useEffect(() => {
     setValid(false);

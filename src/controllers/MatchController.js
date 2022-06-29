@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import { useContext } from "react";
 import MatchCard from "../components/MatchCard";
 import { PaginationContext } from "../contexts/PaginationContext";
@@ -8,12 +7,10 @@ import ErrorProvider from "../tools/ErrorProvider";
 
 export default function MatchController() {
   const [page, setPage] = useContext(PaginationContext);
-  console.log(page);
   const [data, loading, error] = useFetch(`api/profiles/${page + 1}`);
-  console.log(data);
 
   function sendInterest(interest) {
-    fetch("api/users", {
+    fetch(`api/users/${data.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

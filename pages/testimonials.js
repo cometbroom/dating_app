@@ -9,12 +9,10 @@ export default function Testimonials() {
   );
 
   return (
-    <>
-      <LandingLayout>
-        <ErrorProvider loading={loading} error={error}>
-          {data && <TestimonialView users={data.results} />}
-        </ErrorProvider>
-      </LandingLayout>
-    </>
+    <LandingLayout>
+      <ErrorProvider loading={loading} error={error}>
+        {data && <TestimonialView users={data.results} />}
+      </ErrorProvider>
+    </LandingLayout>
   );
 }

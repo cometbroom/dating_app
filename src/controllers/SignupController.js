@@ -9,6 +9,8 @@ import {
 import { useEffect, useState } from "react";
 import InterestsInput from "../components/InterestsInput";
 import { VALIDATION } from "../tools/constants";
+import useKeyEvents from "../hooks/useKeyEvents";
+import { signIn } from "next-auth/react";
 
 export default function SignupController() {
   const [name, setName] = useState("");
@@ -52,75 +54,79 @@ export default function SignupController() {
       },
       body: JSON.stringify({ name, email, password, interests }),
     });
-    const data = await response.json();
+    if (response.status === 201)
+      signIn("credentials", {
+        callbackUrl: "/application",
+        email,
+        password,
+      });
   }
+  useKeyEvents(submitForm);
 
   return (
-    <>
-      <Stack spacing={2}>
-        <InterestsInput
-          placeholder="Add a few interests"
-          setValues={setInterests}
-          values={interests}
-        />
-        <TextField
-          required
-          error={checkName()}
-          helperText={checkName() && "Enter a valid name such as John"}
-          id="outlined-required"
-          label="Name"
-          onChange={debounce(setName)}
-        />
-        <TextField
-          required
-          error={checkEmail()}
-          id="outlined-email-required"
-          helperText={
-            checkEmail() && "Enter a valid email address such as John@aol.com"
-          }
-          label="Email address"
-          type="email"
-          inputProps={{
-            size: "30",
-            required: true,
-          }}
-          onChange={debounce(setEmail)}
-        />
-        <TextField
-          id="outlined-password-input"
-          required
-          error={checkPass()}
-          helperText={
-            checkPass() &&
-            "Please enter a password between 8 and 16 character with one letter and one number"
-          }
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={debounce(setPassword)}
-        />
-        <TextField
-          id="outlined-password-input"
-          required
-          error={checkConfirm()}
-          label="Confirm Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={debounce(setConfirmPass)}
-        />
-        <FormGroup>
-          <FormControlLabel control={<Checkbox />} label="Keep me logged in" />
-        </FormGroup>
+    <Stack spacing={2}>
+      <InterestsInput
+        placeholder="Add a few interests"
+        setValues={setInterests}
+        values={interests}
+      />
+      <TextField
+        required
+        error={checkName()}
+        helperText={checkName() && "Enter a valid name such as John"}
+        id="outlined-required"
+        label="Name"
+        onChange={debounce(setName)}
+      />
+      <TextField
+        required
+        error={checkEmail()}
+        id="outlined-email-required"
+        helperText={
+          checkEmail() && "Enter a valid email address such as John@aol.com"
+        }
+        label="Email address"
+        type="email"
+        inputProps={{
+          size: "30",
+          required: true,
+        }}
+        onChange={debounce(setEmail)}
+      />
+      <TextField
+        id="outlined-password-input"
+        required
+        error={checkPass()}
+        helperText={
+          checkPass() &&
+          "Please enter a password between 8 and 16 character with one letter and one number"
+        }
+        label="Password"
+        type="password"
+        autoComplete="current-password"
+        onChange={debounce(setPassword)}
+      />
+      <TextField
+        id="outlined-password-input"
+        required
+        error={checkConfirm()}
+        label="Confirm Password"
+        type="password"
+        autoComplete="current-password"
+        onChange={debounce(setConfirmPass)}
+      />
+      <FormGroup>
+        <FormControlLabel control={<Checkbox />} label="Keep me logged in" />
+      </FormGroup>
 
-        <Button
-          disabled={!valid}
-          variant="contained"
-          color="secondary"
-          onClick={submitForm}
-        >
-          Sign up!
-        </Button>
-      </Stack>
-    </>
+      <Button
+        disabled={!valid}
+        variant="contained"
+        color="secondary"
+        onClick={submitForm}
+      >
+        Sign up!
+      </Button>
+    </Stack>
   );
 }

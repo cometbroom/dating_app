@@ -50,4 +50,10 @@ export const CALL_STATES = {
   ONCALL: 2,
 };
 
+export const LOREM_IPSUM = (amount) =>
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean volutpat vel mauris et vehicula. Vestibulum quis velit sem. Aliquam mattis posuere est, quis dapibus turpis varius eget. Nunc euismod leo eget nibh convallis ullamcorper. Duis fringilla vel tortor sit amet convallis. Proin scelerisque leo sit amet orci vestibulum, eu consequat nibh interdum. Nulla euismod ante sit amet ipsum aliquam semper. Aenean interdum egestas lacus, in hendrerit erat interdum sit amet. Mauris lobortis ante ut nisl hendrerit, et cursus massa viverra. Nulla hendrerit lacus vitae sem maximus condimentum. Fusce consequat arcu ut euismod ultrices.".slice(
+    0,
+    amount
+  );
+
 export const GET_ERROR_PATH = (yourJoin) => `/error/${yourJoin}`;

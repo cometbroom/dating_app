@@ -1,15 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Grid,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Container, Grid, useMediaQuery } from "@mui/material";
 import classNames from "classnames";
-import { useState } from "react";
 import styles from "../../styles/Testimonial.module.css";
+import TestimonyCard from "../components/TestimonyCard";
 
 const LOREM =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac ultrices lorem. Cras dictum, nunc sit amet blandit dignissim, enim velit sagittis eros, ut lobortis est purus eget nibh. Ut eu congue libero, at porta felis. Nulla quis est nec mauris pharetra ultrices. Pellentesque sit amet posuere odio, at tempus urna. Sed at nisl hendrerit, pellentesque dolor sed, vestibulum ante. Sed sollicitudin condimentum libero.";
@@ -20,10 +12,9 @@ export default function TestimonialView({ users }) {
     <Container>
       <Grid container mt={10} className={styles.container}>
         {users.map((user, idx) => (
-          <Grid item key={idx}>
-            <Card
-              xs={12}
-              className={
+          <Grid xs={12} item key={idx}>
+            <TestimonyCard
+              cardClass={
                 idx % 2 !== 0
                   ? classNames(
                       styles.card,
@@ -34,17 +25,11 @@ export default function TestimonialView({ users }) {
                       matchBigScreen ? styles.oddCard : ""
                     )
               }
-            >
-              <CardMedia
-                className={styles.cardMedia}
-                image={user.picture.large}
-                title="Image Title"
-              />
-              <CardContent className={styles.cardContent}>
-                <Typography variant="h4">{user.name.first}</Typography>
-                <Typography variant="h6">{LOREM}</Typography>
-              </CardContent>
-            </Card>
+              mediaClass={styles.cardMedia}
+              contentClass={styles.cardContent}
+              user={user}
+              text={LOREM}
+            />
           </Grid>
         ))}
       </Grid>

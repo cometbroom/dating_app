@@ -1,6 +1,9 @@
 import useSWR from "swr";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const fetcher = (...args) =>
+  fetch(...args, { method: "GET" }).then((res) => {
+    return res.json();
+  });
 
 export default function useContacts() {
   const { data, error } = useSWR(`/api/chat`, fetcher, {

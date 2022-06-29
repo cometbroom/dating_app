@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import ReactAudioPlayer from "react-audio-player";
+import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import CallCard from "../components/CallCard";
 
@@ -16,11 +15,8 @@ export default function AudioProvider({ peer, ...props }) {
     if (!peer) return;
     peer.on("call", (incoming) => {
       setCaller(incoming.metadata.name);
-      // handle browser prefixes
       if (!navigator) return;
       navigator.getUserMedia = NAVIGATORS(navigator);
-
-      console.log("call gotten");
 
       setCallFunction({
         accept: () => {
@@ -32,18 +28,15 @@ export default function AudioProvider({ peer, ...props }) {
             function error(err) {}
           );
           incoming.on("stream", (stream) => {
-            console.log("stream came", stream);
             setStream(stream);
           });
         },
         reject: () => {
-          console.log("closing clinet");
           incoming.close();
           peer.destroy();
           setCallFunction();
         },
       });
-      console.log(callFunction);
     });
   }, [peer]);
 
@@ -55,15 +48,7 @@ export default function AudioProvider({ peer, ...props }) {
         )}
 
         {props.children}
-        {stream && (
-          <ReactPlayer
-            playing={stream ? true : false}
-            url={stream}
-            onStart={() => {
-              console.log("Media started playing");
-            }}
-          />
-        )}
+        {stream && <ReactPlayer playing={stream ? true : false} url={stream} />}
       </>
     </AudioContext.Provider>
   );
