@@ -6,8 +6,8 @@ export default function Layout({ children }) {
   return (
     <>
       <NextSeo
-        title="Submarine Dating"
-        description="Dating website for unique people."
+        title="Submarine Social"
+        description="Social website for unique people."
       />
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />

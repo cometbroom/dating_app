@@ -24,7 +24,7 @@ export default function LandingView() {
       <Grid item xs={12} sm={6}>
         <Box>
           <Typography variant="h4" color="primary">
-            Submarine Socializing
+            Submarine Social
           </Typography>
           <Typography variant="h5" paragraph align="justify" pr={2}>
             Find people that share your interest and get submerged into the
