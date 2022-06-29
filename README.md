@@ -2,7 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Try the App
 
-You can visit the deployed app here: [Submarine](https://dating-app-six.vercel.app/)
+You can visit the deployed app here: [Submarine Social](https://dating-app-six.vercel.app/)
+
+## Application Architecture
+
+![Diagram of application architecture](./assets/Submarine%20social.drawio.svg)
 
 ### Landing Page
 

@@ -9,9 +9,9 @@ import CommController from "../../src/controllers/CommController";
 import { useState } from "react";
 import useSession from "../../src/hooks/useSession";
 import AudioProvider from "../../src/contexts/AudioContext";
-import { Alert, Box, Snackbar } from "@mui/material";
+import { Box } from "@mui/material";
 
-export default function IndexApp({ pageProps }) {
+export default function IndexApp() {
   const [data, loading, error] = useFetch("api/profiles");
   const [session] = useSession();
   const [tab, setTab] = useState(0);

@@ -1,4 +1,3 @@
-import { MongoClient } from "mongodb";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db_client } from "../../../middleware/database";
@@ -37,7 +36,6 @@ export const AUTH_OPTIONS = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
-      // Persist the OAuth access_token to the token right after signin
       user &&
         ((token.userId = user.id),
         (token.peerId = user.peerId),
@@ -51,12 +49,6 @@ export const AUTH_OPTIONS = {
       return session;
     },
   },
-  // callbacks: {
-  //   async jwt({ token }) {
-  //     token.userRole = "admin";
-  //     return token;
-  //   },
-  // },
 };
 
 export default NextAuth(AUTH_OPTIONS);
