@@ -22,6 +22,8 @@ As you can see you can swipe on potential connections based on interest.
 ## Code structure
 ```
 .
+├── assets/
+│   └── ...Github assets
 ├── middleware/
 │   └── middleware for next
 ├── pages/
@@ -36,32 +38,41 @@ As you can see you can swipe on potential connections based on interest.
 │   ├── components/
 │   │   └── ...simple components
 │   ├── contexts/
-│   │   └── ...Context API
+│   │   └── ...context API
 │   ├── controllers/
-│   │   └── ...Data interactive
+│   │   └── ...data interactive components
 │   ├── hooks
 │   ├── layouts/
 │   │   └── ...web section layouts
-│   ├── tools
+│   ├── tools/
+│   │   └── ...various helper functions such as casing, type checking etc...
 │   └── views/
 │       └── ...advanced render functions
 └── styles/
     └── ...style modules
-
 ```
 
 ## Libraries
 
 - **MUI**: Material UI as design foundation.
 - **Emotion**: Dependency for Styling with MUI.
+- **Framer-motion**: Animation.
 - **SVGR**: SVG file loading.
 - **Classnames**: To pass multiple classnames to components.
-- **Dotenv**: Environment variables.
-- **Framer-motion**: Animation.
+- **peerjs**: Tools to allow WebRTC p2p connection using EventEmitter3.
+- **React-player**: MediaStream play capability with URL object.
+- **swr**: Optimized and cached fetching.
+- **Next-SEO**: Search engine optimization.
 - **Mongodb**: NoSQL db.
 - **Next-connect**: Middleware and better endpoints.
-- **Next-SEO**: Search engine optimization.
 - **node-fetch**: Fetch on the backend.
+- **ajv**: Compiled data validation for the backend.
+- **next-auth**: Credentials authentication.
+- **Dotenv**: Environment variables.
+
+
+
+
 
 ## Get involved
 
