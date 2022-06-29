@@ -4,6 +4,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 You can visit the deployed app here: [Submarine Social](https://dating-app-six.vercel.app/)
 
+If you don't like to sign up, you can use one of these test accounts:
+
+Emails: test1@gmail.com test2@gmail.com test3@gmail.com
+
+Password: Test1234
+
 ## Application Architecture
 
 ![Diagram of application architecture](./assets/Submarine%20social.drawio.svg)
